@@ -1,7 +1,7 @@
 'use strict';
 
-var extend = require('extend-shallow');
 var through = require('through2');
+var extend = require('extend-shallow');
 var toc = require('markdown-toc');
 
 module.exports = function(verb) {
@@ -12,7 +12,7 @@ module.exports = function(verb) {
       return;
     }
     file.toc = toc(file.content, opts);
-    next();
+    next(null, file);
   });
 
   verb.preWrite(/\.md/, function(file, next) {
@@ -30,7 +30,7 @@ module.exports = function(verb) {
     str = str.split('<!-- toc -->').join(tocString);
     str = str.replace(/\n{2,}/g, '\n\n');
     file.contents = new Buffer(str);
-    next();
+    next(null, file);
   });
 
   verb.plugin('toc.create', function(options) {

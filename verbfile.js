@@ -87,15 +87,15 @@ module.exports = function(verb, base) {
   verb.task('templates', ['create', 'helpers', 'data'], function(cb) {
     verb.engine('*', engine, { delims: ['{%', '%}'] });
 
-    debug('adding templates');
-    verb.layout('default', {contents: read(verb, 'default.md')});
-
     debug('adding .verb.md');
     if (fs.existsSync(path.resolve(verb.cwd, '.verb.md'))) {
       verb.doc('readme.md', {contents: read(verb, '.verb.md', verb.cwd)});
     } else {
       verb.doc('readme.md', {contents: read(verb, '.verb.md'), layout: 'default'});
     }
+
+    debug('adding layouts');
+    verb.layouts('templates/layouts/*.md');
 
     debug('adding includes');
     verb.includes(require('./templates/includes'));
