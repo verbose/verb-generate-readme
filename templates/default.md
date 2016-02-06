@@ -2,16 +2,21 @@
 
 > {%= description %}
 
+{%= include("highlight") %}
+
+<!-- toc -->
+
 ## Install
 {%= include('install-npm', {save: true}) %}
 
 {% body %}
 
+## Related projects
+{%= verb.related.description || "" %}
+{%= related(verb.related.list) %}
+
 ## Running tests
 {%= include("tests") %}
-
-## Related projects
-{%= related(verb.related.list) %}
 
 ## Contributing
 {%= include("contributing") %}

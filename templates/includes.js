@@ -1,6 +1,12 @@
 'use strict';
 
 module.exports = {
+  'highlight': [
+    '{% if (verb.related && verb.related.highlight) { %}',
+    'You might also be interested in [{%= verb.related.highlight %}]({%= pkg(verb.related.highlight, "homepage") %}).',
+    '{% } %}',
+  ].join('\n'),
+
   'related-list': [
     '{% if (verb.related && verb.related.list && verb.related.list.length) { %}',
     '{%= verb.related.description || "You might also be interested in these projects:" %} ',
