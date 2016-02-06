@@ -1,0 +1,58 @@
+{
+  "name": "verb-generate-readme",
+  "description": "Verb readme generator.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/verb-generate-readme",
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/verb-generate-readme",
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/verb-generate-readme/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "main": "verbfile.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "common-middleware": "^0.2.5",
+    "debug": "^2.2.0",
+    "engine-base": "^0.1.2",
+    "extend-shallow": "^2.0.1",
+    "helper-apidocs": "^0.5.0",
+    "helper-copyright": "^2.0.1",
+    "helper-date": "^0.2.2",
+    "helper-issue": "^0.3.0",
+    "helper-reflinks": "^3.0.2",
+    "helper-related": "^0.12.1",
+    "markdown-toc": "^0.12.3",
+    "through2": "^2.0.0"
+  },
+  "devDependencies": {
+    "gulp-format-md": "*",
+    "mocha": "*"
+  },
+  "keywords": [],
+  "lintDeps": {
+    "ignore": []
+  },
+  "verb": {
+    "layout": "default",
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "related": {
+      "list": [
+        "verb"
+      ]
+    },
+    "reflinks": [
+      "verb"
+    ]
+  }
+}
