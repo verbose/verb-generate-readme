@@ -10,7 +10,10 @@
   },
   "license": "MIT",
   "files": [
-    "index.js"
+    "index.js",
+    "verbfile.js",
+    "toc.js",
+    "templates"
   ],
   "main": "verbfile.js",
   "engines": {
@@ -24,11 +27,13 @@
     "debug": "^2.2.0",
     "engine-base": "^0.1.2",
     "extend-shallow": "^2.0.1",
+    "get-pkg": "^0.2.0",
+    "get-value": "^2.0.3",
     "helper-apidocs": "^0.5.0",
     "helper-copyright": "^2.0.1",
     "helper-date": "^0.2.2",
     "helper-issue": "^0.3.0",
-    "helper-reflinks": "^3.0.2",
+    "helper-reflinks": "^3.0.3",
     "helper-related": "^0.12.1",
     "markdown-toc": "^0.12.3",
     "through2": "^2.0.0"
@@ -42,12 +47,16 @@
     "ignore": []
   },
   "verb": {
+    "toc": false,
     "layout": "default",
     "plugins": [
       "gulp-format-md"
     ],
     "related": {
+      "highlight": "generate",
       "list": [
+        "assemble",
+        "generate",
         "verb"
       ]
     },
