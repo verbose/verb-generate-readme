@@ -1,6 +1,6 @@
 {
   "name": "verb-generate-readme",
-  "description": "Verb readme generator.",
+  "description": "Verb readme generator. Requires verb v0.9.0 or higher.",
   "version": "0.1.0",
   "homepage": "https://github.com/jonschlinkert/verb-generate-readme",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
@@ -42,13 +42,20 @@
     "gulp-format-md": "*",
     "mocha": "*"
   },
-  "keywords": [],
-  "lintDeps": {
-    "ignore": []
-  },
+  "keywords": [
+    "generate",
+    "generator",
+    "markdown",
+    "readme",
+    "template",
+    "templates",
+    "verb",
+    "verb-generator",
+    "verbgenerator"
+  ],
   "verb": {
     "toc": false,
-    "layout": "default",
+    "layout": "global",
     "plugins": [
       "gulp-format-md"
     ],
