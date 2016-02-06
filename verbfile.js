@@ -10,11 +10,14 @@ var reflinks = require('helper-reflinks');
 var related = require('helper-related');
 var apidocs = require('helper-apidocs');
 var issue = require('helper-issue');
+var date = require('helper-date');
+var engine = require('engine-base');
+var getPkg = require('get-pkg');
+var get = require('get-value');
+var toc = require('./toc');
 
 module.exports = function(verb, base) {
-  // verb.invoke('verb-generate-templates');
-  // verb.invoke('verb-generate-includes');
-  verb.register('toc', require('./toc'));
+  verb.register('toc', toc);
   verb.invoke('toc');
 
   verb.task('data', function(cb) {
@@ -37,7 +40,7 @@ module.exports = function(verb, base) {
       }
     });
 
-    // add "Released under..." statement
+    // Create a license statement from license in from package.json
     formatLicense(verb);
 
     debug('data finished');
@@ -47,9 +50,19 @@ module.exports = function(verb, base) {
   verb.task('helpers', function(cb) {
     verb.asyncHelper('related', related({verbose: true}));
     verb.asyncHelper('reflinks', reflinks({verbose: true}));
+    verb.asyncHelper('pkg', function(name, prop, cb) {
+      if (typeof prop === 'function') {
+        cb = prop;
+        prop = null;
+      }
+      getPkg(name, function(err, pkg) {
+        if (err) return cb(err);
+        cb(null, prop ? get(pkg, prop) : pkg);
+      });
+    });
 
     verb.helper('apidocs', apidocs());
-    verb.helper('date', require('helper-date'));
+    verb.helper('date', date);
     verb.helper('copyright', copyright({linkify: true}));
     verb.helper('issue', function(options) {
       var opts = extend({}, this.context, options);
@@ -72,14 +85,14 @@ module.exports = function(verb, base) {
   });
 
   verb.task('templates', ['create', 'helpers', 'data'], function(cb) {
-    verb.engine('*', require('engine-base'), { delims: ['{%', '%}'] });
+    verb.engine('*', engine, { delims: ['{%', '%}'] });
 
     debug('adding templates');
-    verb.layout('default', {contents: read(verb, 'layout.md')});
+    verb.layout('default', {contents: read(verb, 'default.md')});
 
-    debug('adding templates');
+    debug('adding .verb.md');
     if (fs.existsSync(path.resolve(verb.cwd, '.verb.md'))) {
-      verb.doc('readme.md', {contents: read(verb, '.verb.md', verb.cwd), layout: 'default'});
+      verb.doc('readme.md', {contents: read(verb, '.verb.md', verb.cwd)});
     } else {
       verb.doc('readme.md', {contents: read(verb, '.verb.md'), layout: 'default'});
     }
@@ -93,14 +106,9 @@ module.exports = function(verb, base) {
   });
 
   verb.task('readme', ['templates'], function(cb) {
-    var tocCreate = verb.plugin('toc.create');
-    var tocInject = verb.plugin('toc.inject');
-
     return verb.src('.verb.md', {cwd: verb.cwd})
-      .pipe(tocCreate)
       .pipe(verb.renderFile('*'))
       .pipe(verb.pipeline(verb.options.pipeline))
-      .pipe(tocInject)
       .pipe(verb.dest(function(file) {
         file.basename = 'readme.md';
         return verb.cwd;
@@ -111,7 +119,8 @@ module.exports = function(verb, base) {
 };
 
 function read(app, fp, cwd) {
-  return fs.readFileSync(path.resolve(cwd || app.env.templates, fp));
+  cwd = cwd || app.env.templates || path.join(__dirname, 'templates');
+  return fs.readFileSync(path.resolve(cwd, fp));
 }
 
 /**
