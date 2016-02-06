@@ -1,18 +1,26 @@
 # verb-generate-readme [![NPM version](https://img.shields.io/npm/v/verb-generate-readme.svg)](https://www.npmjs.com/package/verb-generate-readme) [![Build Status](https://img.shields.io/travis/jonschlinkert/verb-generate-readme.svg)](https://travis-ci.org/jonschlinkert/verb-generate-readme)
 
-> Verb readme generator.
+> Verb readme generator. Requires verb v0.9.0 or higher.
 
 You might also be interested in [generate](https://github.com/generate/generate).
 
 ## Install
 
-Install with [npm](https://www.npmjs.com/):
+Install globally with [npm](https://www.npmjs.com/)
 
 ```sh
-$ npm i verb-generate-readme --save
+$ npm i -g verb-generate-readme
+```
+
+If you do not already have verb installed globally, you can do that now with the following command:
+
+```sh
+$ npm i -g verb
 ```
 
 ## Usage
+
+With both [verb](https://github.com/verbose/verb) and the generator installed globally, you may now run the generator with the following command:
 
 ```sh
 $ verb readme
