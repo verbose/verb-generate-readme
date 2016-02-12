@@ -28,15 +28,9 @@ module.exports = function(app, base) {
     runner.url = runner.homepage;
     app.data({runner: runner});
 
-    // add author data (temporary for testing!!!)
-    app.data({
-      author: {
-        name: 'Jon Schlinkert',
-        username: 'jonschlinkert',
-        twitter: 'jonschlinkert',
-        url: 'https://github.com/jonschlinkert'
-      }
-    });
+    // this needs work, we need to also merge in globally persisted values
+    var person = expandPerson(app.data('author'));
+    app.data({author: person});
 
     // Create a license statement from license in from package.json
     app.data(formatLicense(app));
@@ -171,4 +165,29 @@ function formatLicense(app) {
 
 function repoFile(repo, filename) {
   return 'https://github.com/' + repo + '/blob/master/' + filename;
+}
+
+/**
+ * Expand person strings into objects
+ */
+
+function expandPerson(str) {
+  var person = {};
+  if (Array.isArray(str)) {
+    str.forEach(function(val) {
+      person = utils.extend({}, person, utils.parseAuthor(val));
+    });
+  } else if (typeof str === 'string') {
+    person = utils.extend({}, person, utils.parseAuthor(str));
+  } else if (str && typeof str === 'object') {
+    person = utils.extend({}, person, str);
+  }
+
+  if (!person.username && person.url && /github\.com/.test(person.url)) {
+    person.username = person.url.slice(person.url.lastIndexOf('/') + 1);
+  }
+  if (!person.twitter && person.username) {
+    person.twitter = person.username;
+  }
+  return utils.omitEmpty(person);
 }

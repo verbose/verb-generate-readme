@@ -17,6 +17,8 @@ require('helper-date', 'date');
 require('helper-issue', 'issue');
 require('helper-reflinks', 'reflinks');
 require('helper-related', 'related');
+require('omit-empty');
+require('parse-author');
 require = fn;
 
 /**
