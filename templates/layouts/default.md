@@ -4,6 +4,7 @@
 
 {%= include("highlight") %}
 
+## TOC
 <!-- toc -->
 
 ## Install
@@ -14,6 +15,9 @@
 ## Related projects
 {%= verb.related.description || "" %}
 {%= related(verb.related.list) %}
+
+## Generate docs
+{%= include("generate-docs") %}
 
 ## Running tests
 {%= include("tests") %}

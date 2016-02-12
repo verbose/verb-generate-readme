@@ -62,6 +62,20 @@ module.exports = {
     '```'
   ].join('\n'),
 
+  'generate-docs': [
+    'Generate readme and API documentation with [verb][]:',
+    '',
+    '```sh',
+    '$ npm i -d && npm run docs',
+    '```',
+    '',
+    'Or, if [verb][] is installed globally:',
+    '',
+    '```sh',
+    '$ verb',
+    '```'
+  ].join('\n'),
+
   'author': [
     '**{%= author.name %}**',
     '',
