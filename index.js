@@ -47,14 +47,23 @@ module.exports = function(app, base) {
 
     app.asyncHelper('related', utils.related({verbose: true}));
     app.asyncHelper('reflinks', utils.reflinks({verbose: true}));
-    app.asyncHelper('pkg', function(name, prop, cb) {
+    app.asyncHelper('pkg', function fn(name, prop, cb) {
       if (typeof prop === 'function') {
         cb = prop;
         prop = null;
       }
+
+      var key = name + ':' + String(prop);
+      if (fn[key]) {
+        cb(null, fn[key]);
+        return;
+      }
+
       utils.getPkg(name, function(err, pkg) {
         if (err) return cb(err);
-        cb(null, prop ? utils.get(pkg, prop) : pkg);
+        var res = prop ? utils.get(pkg, prop) : pkg;
+        fn[key] = res;
+        cb(null, res);
       });
     });
 
@@ -182,7 +191,6 @@ function expandPerson(str) {
   } else if (str && typeof str === 'object') {
     person = utils.extend({}, person, str);
   }
-
   if (!person.username && person.url && /github\.com/.test(person.url)) {
     person.username = person.url.slice(person.url.lastIndexOf('/') + 1);
   }
