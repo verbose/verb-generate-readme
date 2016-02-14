@@ -93,9 +93,9 @@ module.exports = function(app, base) {
 
     // load .verb.md from user cwd
     if (fs.existsSync(path.resolve(app.cwd, '.verb.md'))) {
-      app.doc('readme.md', {contents: read(app, '.verb.md', app.cwd)});
+      app.doc('README.md', {contents: read(app, '.verb.md', app.cwd)});
     } else {
-      app.doc('readme.md', {contents: read(app, '.verb.md'), layout: 'default'});
+      app.doc('README.md', {contents: read(app, '.verb.md'), layout: 'default'});
     }
 
     // load layout templates
@@ -122,7 +122,7 @@ module.exports = function(app, base) {
       .on('error', console.log)
       .pipe(app.pipeline(app.options.pipeline))
       .pipe(app.dest(function(file) {
-        file.basename = 'readme.md';
+        file.basename = 'README.md';
         return app.cwd;
       }));
   });
