@@ -29,7 +29,7 @@ module.exports = function(app, base) {
     app.data({runner: runner});
 
     // this needs work, we need to also merge in globally persisted values
-    var person = expandPerson(app.data('author'));
+    var person = expandPerson(app.data('author'), app.cwd);
     app.data({author: person});
 
     // Create a license statement from license in from package.json
@@ -180,7 +180,7 @@ function repoFile(repo, filename) {
  * Expand person strings into objects
  */
 
-function expandPerson(str) {
+function expandPerson(str, cwd) {
   var person = {};
   if (Array.isArray(str)) {
     str.forEach(function(val) {
@@ -193,6 +193,9 @@ function expandPerson(str) {
   }
   if (!person.username && person.url && /github\.com/.test(person.url)) {
     person.username = person.url.slice(person.url.lastIndexOf('/') + 1);
+  }
+  if (!person.username) {
+    person.username = utils.gitUserName(cwd)
   }
   if (!person.twitter && person.username) {
     person.twitter = person.username;

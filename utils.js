@@ -11,6 +11,7 @@ require = utils;
 require('extend-shallow', 'extend');
 require('get-pkg', 'getPkg');
 require('get-value', 'get');
+require('git-user-name');
 require('helper-apidocs', 'apidocs');
 require('helper-copyright', 'copyright');
 require('helper-date', 'date');
