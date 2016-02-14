@@ -6,7 +6,7 @@ var debug = require('debug')('base:verb:generator');
 var utils = require('./utils');
 
 module.exports = function(app, base) {
-  app.extendWith(require('gen-defaults'));
+  app.extendWith(require('generate-defaults'));
   app.extendWith(require('verb-toc'));
 
   /**
@@ -82,21 +82,39 @@ module.exports = function(app, base) {
   });
 
   /**
+   * Load .verb.md
+   */
+
+  app.task('verbmd', function(cb) {
+    debug('loading .verb.md');
+
+    // try to load .verb.md from user cwd
+    if (fs.existsSync(path.resolve(app.cwd, '.verb.md'))) {
+      app.doc('readme.md', {contents: read(app, '.verb.md', app.cwd)});
+      cb();
+      return;
+    }
+
+    // if no .verb.md exists, offer to add one
+    app.questions.set('verbmd', 'Can\'t find a .verb.md, want to add one?');
+    app.ask('verbmd', { save: false }, function(err, answers) {
+      if (err) {
+        cb(err);
+        return;
+      }
+      if (utils.isAffirmative(answers.verbmd)) {
+        app.doc('templates/readme/.verb.md');
+      }
+      cb();
+    });
+  });
+
+  /**
    * Templates
    */
 
-  app.task('templates', ['helpers', 'data'], function(cb) {
+  app.task('templates', ['verbmd', 'helpers', 'data'], function(cb) {
     debug('loading templates');
-
-    // create badges collection
-    app.create('badges', {viewType: 'partial', engine: '*' });
-
-    // load .verb.md from user cwd
-    if (fs.existsSync(path.resolve(app.cwd, '.verb.md'))) {
-      app.doc('README.md', {contents: read(app, '.verb.md', app.cwd)});
-    } else {
-      app.doc('README.md', {contents: read(app, '.verb.md'), layout: 'default'});
-    }
 
     // load layout templates
     app.layouts('templates/layouts/*.md', {cwd: __dirname});
@@ -116,14 +134,17 @@ module.exports = function(app, base) {
   app.task('readme', ['defaults', 'templates'], function(cb) {
     debug('starting readme task');
 
+    app.data({options: app.options});
+
     return app.src('.verb.md', { cwd: app.cwd })
       .on('error', console.log)
       .pipe(app.renderFile('*'))
       .on('error', console.log)
       .pipe(app.pipeline(app.options.pipeline))
+      .on('error', console.log)
       .pipe(app.dest(function(file) {
-        file.basename = 'README.md';
-        return app.cwd;
+        file.basename = 'readme.md';
+        return app.options.dest || app.cwd;
       }));
   });
 
