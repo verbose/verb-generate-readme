@@ -28,6 +28,7 @@
     "gen-defaults": "^0.1.0",
     "get-pkg": "^0.2.0",
     "get-value": "^2.0.3",
+    "git-user-name": "^1.1.2",
     "helper-apidocs": "^0.5.1",
     "helper-copyright": "^2.0.1",
     "helper-date": "^0.2.2",
