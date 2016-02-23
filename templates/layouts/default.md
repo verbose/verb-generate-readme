@@ -16,14 +16,14 @@
 {%= verb.related.description || "" %}
 {%= related(verb.related.list) %}
 
-## Generate docs
-{%= include("generate-docs") %}
+## Contributing
+{%= include("contributing") %}
+
+## Building docs
+{%= include("build-docs") %}
 
 ## Running tests
 {%= include("tests") %}
-
-## Contributing
-{%= include("contributing") %}
 
 ## Author
 {%= include("author") %}
