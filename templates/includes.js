@@ -18,7 +18,7 @@ var includes = {
     'Install with [npm](https://www.npmjs.com/):',
     '',
     '```sh',
-    '$ npm i {%= name %}{%= ((typeof save !== "undefined" && save === true) ? " --save" : "") %}',
+    '$ npm install {%= name %}{%= ((typeof save !== "undefined" && save === true) ? " --save" : "") %}',
     '```'
   ].join('\n'),
 
@@ -26,7 +26,7 @@ var includes = {
     'Install globally with [npm](https://www.npmjs.com/)',
     '',
     '```sh',
-    '$ npm i -g {%= name %}',
+    '$ npm install -g {%= name %}',
     '```'
   ].join('\n'),
 
@@ -34,7 +34,7 @@ var includes = {
     'Install with [npm](https://www.npmjs.com/):',
     '',
     '```sh',
-    '$ npm i {%= name %}',
+    '$ npm install {%= name %}',
     '```'
   ].join('\n'),
 
@@ -42,7 +42,7 @@ var includes = {
     'Install as a `devDependency` with [npm](https://www.npmjs.com/):',
     '',
     '```sh',
-    '$ npm i {%= name %} -D',
+    '$ npm install {%= name %} --save-dev',
     '```'
   ].join('\n'),
 
@@ -58,7 +58,7 @@ var includes = {
     'Install dev dependencies:',
     '',
     '```sh',
-    '$ npm i -d && npm test',
+    '$ npm install -d && npm test',
     '```'
   ].join('\n'),
 
@@ -66,7 +66,7 @@ var includes = {
     'Generate readme and API documentation with [verb][]:',
     '',
     '```sh',
-    '$ npm i verb && npm run docs',
+    '$ npm install verb && npm run docs',
     '```',
     '',
     'Or, if [verb][] is installed globally:',
