@@ -171,6 +171,12 @@ module.exports = function(app, base) {
 
     app.data(app.pkg.get('verb.data') || {});
 
+    Object.defineProperty(app.cache.data, 'alias', {
+      get: function() {
+        return app.toAlias(app.pkg.get('name'));
+      }
+    });
+
     return app.src('.verb.md', { cwd: app.cwd })
       .on('error', console.log)
       .pipe(app.renderFile('*', app.cache.data))
@@ -181,9 +187,6 @@ module.exports = function(app, base) {
         file.basename = 'README.md';
         return app.options.dest || app.cwd;
       }))
-      // .on('end', function() {
-      //   app.emit('end')
-      // })
   });
 
   app.task('default', { silent: true },  ['readme'], function(cb) {
