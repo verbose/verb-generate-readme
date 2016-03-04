@@ -54,6 +54,16 @@ var includes = {
     '```'
   ].join('\n'),
 
+  'upgrading': [
+    '**Clear your cache and re-install**',
+    '',
+    'If you\'re currently running {%= name %} v{%= previous("minor", version) %} or lower, please do the following to clear out old versions of {%= name %}, so that the latest version of {%= name %} will install properly:',
+    '',
+    '```bash',
+    '$ npm cache clean && npm i -g {%= name %}',
+    '```',
+  ].join('\n'),
+
   'tests': [
     'Install dev dependencies:',
     '',

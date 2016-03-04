@@ -92,9 +92,30 @@ module.exports = function(app, base) {
       });
     });
 
+    app.asyncHelper('read', function(fp, cb) {
+      fs.read(fp, 'utf8', cb);
+    });
+
     app.helper('apidocs', utils.apidocs());
     app.helper('date', utils.date);
     app.helper('copyright', utils.copyright({linkify: true}));
+
+    app.helper('previous', function(increment, v) {
+      var segs = String(v).split('.');
+      var version = '';
+      switch(increment) {
+        case 'major':
+          version = (segs[0] - 1) + '.0.0';
+          break;
+        case 'minor':
+        default: {
+          version = segs[0] + '.' + (segs[1] - 1) + '.0';
+          break;
+        }
+      }
+      return version;
+    });
+
     app.helper('issue', function(options) {
       var opts = utils.extend({}, this.context, options);
       opts.owner = opts.owner || opts.author && opts.author.username;
@@ -128,7 +149,7 @@ module.exports = function(app, base) {
         return;
       }
       if (utils.isAffirmative(answers.verbmd)) {
-        app.doc('.verb.md', {contents: read(app, 'readme/.verb.md')});
+        app.doc('.verb.md', {contents: read(app, 'readme/.verb.md')})
         app.toStream('docs')
           .pipe(app.dest(app.cwd))
           .on('end', cb);
@@ -169,11 +190,9 @@ module.exports = function(app, base) {
   app.task('readme', ['middleware', 'defaults', 'templates'], function() {
     debug('starting readme task');
 
-    app.data(app.pkg.get('verb.data') || {});
-
     Object.defineProperty(app.cache.data, 'alias', {
       get: function() {
-        return app.toAlias(app.pkg.get('name'));
+        return camelcase(app.toAlias(app.pkg.get('name')));
       }
     });
 
@@ -223,6 +242,10 @@ function read(app, fp, cwd) {
 
 function formatLicense(app) {
   var license = app.data('license') || 'MIT';
+  if (/Released/.test(license)) {
+    return { license: license };
+  }
+
   var fp = path.resolve(app.cwd, 'LICENSE');
   if (fs.existsSync(fp)) {
     var url = repoFile(app.data('repository'), 'LICENSE');
@@ -270,4 +293,18 @@ function expandPerson(str, cwd) {
     person.twitter = person.username;
   }
   return utils.omitEmpty(person);
+}
+
+/**
+ * Camelcase the given string
+ */
+
+function camelcase(str) {
+  if (str.length === 1) {
+    return str.toLowerCase();
+  }
+  str = str.replace(/^[\W_]+|[\W_]+$/g, '').toLowerCase();
+  return str.replace(/[\W_]+(\w|$)/g, function(_, ch) {
+    return ch.toUpperCase();
+  });
 }
