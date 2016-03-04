@@ -40,6 +40,7 @@
     "lazy-cache": "^1.0.3",
     "omit-empty": "^0.3.2",
     "parse-author": "^0.2.0",
+    "sections": "^0.1.7",
     "update-sections": "^0.1.0",
     "verb-toc": "^0.1.1"
   },

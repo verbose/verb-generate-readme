@@ -134,6 +134,11 @@ module.exports = function(app, base) {
   app.task('verbmd', { silent: true }, function(cb) {
     debug('loading .verb.md');
 
+    if (app.docs.getView('.verb.md') || app.docs.getView('readme.md')) {
+      cb();
+      return;
+    }
+
     // try to load .verb.md from user cwd
     if (fs.existsSync(path.resolve(app.cwd, '.verb.md'))) {
       app.doc('README.md', {contents: read(app, '.verb.md', app.cwd)});
@@ -196,7 +201,8 @@ module.exports = function(app, base) {
       }
     });
 
-    return app.src('.verb.md', { cwd: app.cwd })
+    var readme = app.pkg.get('verb.readme') || app.options.readme || '.verb.md';
+    return app.src(readme, { cwd: app.cwd })
       .on('error', console.log)
       .pipe(app.renderFile('*', app.cache.data))
       .on('error', console.log)
@@ -307,4 +313,10 @@ function camelcase(str) {
   return str.replace(/[\W_]+(\w|$)/g, function(_, ch) {
     return ch.toUpperCase();
   });
+}
+
+function filter(name) {
+  return function(key, file) {
+    return key === name || file.basename === name;
+  };
 }
