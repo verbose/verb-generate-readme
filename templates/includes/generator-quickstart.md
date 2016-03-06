@@ -2,8 +2,6 @@
 layout: nil
 ---
 
-## Quickstart
-
 **Getting started**
 
 If you're not already familiar with [generate][], you might find generate's [getting started guide][getting-started] useful before continuining.
