@@ -134,14 +134,14 @@ module.exports = function(app, base) {
   app.task('verbmd', { silent: true }, function(cb) {
     debug('loading .verb.md');
 
-    if (app.docs.getView('.verb.md') || app.docs.getView('readme.md')) {
+    if (app.files.getView('.verb.md') || app.files.getView('readme.md')) {
       cb();
       return;
     }
 
     // try to load .verb.md from user cwd
     if (fs.existsSync(path.resolve(app.cwd, '.verb.md'))) {
-      app.doc('README.md', {contents: read(app, '.verb.md', app.cwd)});
+      app.file('README.md', {contents: read(app, '.verb.md', app.cwd)});
       cb();
       return;
     }
@@ -154,8 +154,8 @@ module.exports = function(app, base) {
         return;
       }
       if (utils.isAffirmative(answers.verbmd)) {
-        app.doc('.verb.md', {contents: read(app, 'readme/.verb.md')})
-        app.toStream('docs')
+        app.file('.verb.md', {contents: read(app, 'readme/.verb.md')})
+        app.toStream('files')
           .pipe(app.dest(app.cwd))
           .on('end', cb);
 
@@ -202,7 +202,7 @@ module.exports = function(app, base) {
     });
 
     var readme = app.pkg.get('verb.readme') || app.options.readme || '.verb.md';
-    return app.src(readme, { cwd: app.cwd })
+    return app.src(readme, { cwd: app.cwd, collection: 'files' })
       .on('error', console.log)
       .pipe(app.renderFile('*', app.cache.data))
       .on('error', console.log)
