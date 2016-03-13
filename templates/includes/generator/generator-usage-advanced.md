@@ -1,7 +1,3 @@
----
-layout: nil
----
-
 ## Advanced usage
 
 **Lazily-extend your generator**

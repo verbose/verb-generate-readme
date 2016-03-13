@@ -1,7 +1,3 @@
----
-layout: nil
----
-
 ## Extend your generator
 
 The [usage instructions](#usage) explain how to use this as a standalone generator, but you can also use `{%= name %}` to extend your own generator, and cut down on boilerplate code needed to get up and running.

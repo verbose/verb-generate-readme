@@ -1,7 +1,3 @@
----
-layout: nil
----
-
 ## Usage
 
 With both `{%= name %}` and `generate` installed globally, you should now be able to run this generator's default task with the following command:
