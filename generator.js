@@ -11,6 +11,13 @@ module.exports = function(app, base) {
   app.extendWith(require('verb-toc'));
 
   /**
+   * View collections
+   */
+
+  app.create('docs', { viewType: 'partial' });
+  app.create('badges', { viewType: 'partial' });
+
+  /**
    * Set options
    */
 
@@ -29,6 +36,10 @@ module.exports = function(app, base) {
     if (app.option('sections')) {
       app.onLoad(/\.md$/, require('./lib/sections')(app));
     }
+
+    app.preRender(/(verb|readme)\.md$/, function(file, next) {
+      utils.del(path.resolve(app.cwd, 'readme.md'), next);
+    });
 
     app.onLoad(/(verb|readme)\.md$/, lint.layout(app));
     app.on('readme-generator:end', function() {
@@ -96,6 +107,16 @@ module.exports = function(app, base) {
       fs.read(fp, 'utf8', cb);
     });
 
+    app.helper('require', function(name) {
+      try {
+        return require(name);
+      } catch (err) {}
+
+      try {
+        return require(path.resolve(name));
+      } catch (err) {}
+    });
+
     app.helper('apidocs', utils.apidocs());
     app.helper('date', utils.date);
     app.helper('copyright', utils.copyright({linkify: true}));
@@ -134,7 +155,7 @@ module.exports = function(app, base) {
   app.task('verbmd', { silent: true }, function(cb) {
     debug('loading .verb.md');
 
-    if (app.files.getView('.verb.md') || app.files.getView('readme.md')) {
+    if (app.views.files['README'] || app.views.files['.verb']) {
       cb();
       return;
     }
@@ -177,7 +198,7 @@ module.exports = function(app, base) {
     app.layouts('templates/layouts/*.md', { cwd: __dirname });
 
     // load include templates
-    app.includes('templates/includes/*.md', { cwd: __dirname });
+    app.includes('templates/includes/**/*.md', { cwd: __dirname });
     app.includes(require('./templates/includes'));
 
     // load badges
@@ -195,14 +216,11 @@ module.exports = function(app, base) {
   app.task('readme', ['middleware', 'defaults', 'templates'], function() {
     debug('starting readme task');
 
-    Object.defineProperty(app.cache.data, 'alias', {
-      get: function() {
-        return camelcase(app.toAlias(app.pkg.get('name')));
-      }
-    });
+    app.option({delims: ['{%', '%}']});
 
-    var readme = app.pkg.get('verb.readme') || app.options.readme || '.verb.md';
-    return app.src(readme, { cwd: app.cwd, collection: 'files' })
+    // var readme = app.options.readme || '.verb.md';
+    // return app.src(readme, { cwd: app.cwd, collection: 'files' })
+    return app.toStream('files')
       .on('error', console.log)
       .pipe(app.renderFile('*', app.cache.data))
       .on('error', console.log)
