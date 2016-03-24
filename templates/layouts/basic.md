@@ -1,28 +1,13 @@
-# {%= name %} {%= badge('npm') %} {%= badge('downloads') %} {%= badge('travis') %}
+---
+layout: nil
+---
 
-> {%= description %}
-
-{%= include("highlight") %}
-
-## TOC
-<!-- toc -->
+{%= include("header") %}
 
 ## Install
-{%= include('install-npm', {save: true}) %}
+{%= include("install-npm", {save: true}) %}
 
 {% body %}
-
-## Related projects
-{%= include("related-list") %}
-
-## Contributing
-{%= include("contributing") %}
-
-## Building docs
-{%= include("build-docs") %}
-
-## Running tests
-{%= include("tests") %}
 
 ## Author
 {%= include("author") %}
