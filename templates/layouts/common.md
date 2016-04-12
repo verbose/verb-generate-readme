@@ -27,7 +27,7 @@ layout: nil
 {%= include("author") %}
 
 ## License
-{%= copyright({linkify: true}) %}
+{%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
 {%= license %}
 
 ***
