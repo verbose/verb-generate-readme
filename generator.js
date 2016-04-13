@@ -4,13 +4,19 @@ var fs = require('fs');
 var path = require('path');
 var debug = require('debug')('base:verb:verb-readme-generator');
 var conflicts = require('base-fs-conflicts');
-var helpers = require('./lib/helpers');
 var utils = require('./lib/utils');
 var lint = require('./lib/lint');
 
-module.exports = function generator(app, base) {
+module.exports = function generator(app) {
   if (!isValidInstance(app)) return;
   debug('initializing', __filename);
+
+  if (typeof app.pkg === 'undefined') {
+    throw new Error('expected the base-pkg plugin to be registered');
+  }
+  if (typeof app.cwd === 'undefined') {
+    app.cwd = process.cwd();
+  }
 
   /**
    * Set options
@@ -35,9 +41,9 @@ module.exports = function generator(app, base) {
   app.use(conflicts());
   app.use(require('verb-defaults'));
   app.use(require('verb-collections'));
+  app.use(require('verb-repo-helpers'));
   app.use(require('verb-repo-data'));
   app.use(require('verb-toc'));
-  app.use(helpers);
 
   /**
    * Middleware
