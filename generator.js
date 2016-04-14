@@ -3,13 +3,15 @@
 var fs = require('fs');
 var path = require('path');
 var debug = require('debug')('base:verb:verb-readme-generator');
-var conflicts = require('base-fs-conflicts');
 var utils = require('./lib/utils');
 var lint = require('./lib/lint');
 
+/**
+ * Verb readme generator
+ */
+
 module.exports = function generator(app) {
   if (!isValidInstance(app)) return;
-  debug('initializing', __filename);
 
   if (typeof app.pkg === 'undefined') {
     throw new Error('expected the base-pkg plugin to be registered');
@@ -17,6 +19,16 @@ module.exports = function generator(app) {
   if (typeof app.cwd === 'undefined') {
     app.cwd = process.cwd();
   }
+
+  debug('initializing <%s>, called from <%s>', __filename, module.parent.id);
+
+  /**
+   * Begin timings (`verb --times`)
+   */
+
+  var time = new utils.Time();
+  var timeDiff = time.diff('verb-readme-generator', app.options);
+  timeDiff('start');
 
   /**
    * Set options
@@ -34,16 +46,19 @@ module.exports = function generator(app) {
     return name.slice(name.lastIndexOf('-') + 1);
   };
 
+  timeDiff('options');
+
   /**
    * Plugins
    */
 
-  app.use(conflicts());
+  app.use(utils.conflicts());
   app.use(require('verb-defaults'));
   app.use(require('verb-collections'));
   app.use(require('verb-repo-helpers'));
   app.use(require('verb-repo-data'));
   app.use(require('verb-toc'));
+  timeDiff('plugins');
 
   /**
    * Middleware
@@ -69,6 +84,7 @@ module.exports = function generator(app) {
         console.log(obj.filename + ' | ' + obj.message);
       });
     });
+    timeDiff('middleware');
     cb();
   });
 
@@ -91,6 +107,8 @@ module.exports = function generator(app) {
 
     app.data({prefix: 'Copyright'});
     debug('data finished');
+
+    timeDiff('data');
     cb();
   });
 
@@ -160,6 +178,7 @@ module.exports = function generator(app) {
 
     // done
     debug('templates finished');
+    timeDiff('templates');
     cb();
   });
 
@@ -167,11 +186,11 @@ module.exports = function generator(app) {
    * Readme task
    */
 
-  app.task('readme', {silent: true}, ['middleware', 'templates', 'verbmd', 'data'], function() {
+  app.task('readme', {silent: true}, ['middleware', 'templates', 'verbmd', 'data'], function(cb) {
     debug('starting readme task');
     var format = require('gulp-format-md');
 
-    return app.toStream('files', filter(this))
+    app.toStream('files', filter(this))
       .on('error', console.log)
       .pipe(app.renderFile('*', app.cache.data))
       .on('error', console.log)
@@ -181,7 +200,12 @@ module.exports = function generator(app) {
       .pipe(app.dest(function(file) {
         file.basename = 'README.md';
         return app.options.dest || app.cwd;
-      }));
+      }))
+      .on('error', cb)
+      .on('end', function() {
+        timeDiff('readme');
+        cb();
+      })
   });
 
   /**
