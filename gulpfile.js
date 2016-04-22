@@ -2,7 +2,6 @@
 
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
-var unused = require('gulp-unused');
 var istanbul = require('gulp-istanbul');
 var unused = require('gulp-unused');
 var eslint = require('gulp-eslint');
