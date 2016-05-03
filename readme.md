@@ -49,7 +49,7 @@ $ verb verbReadmeGenerator
 
 In any project where you want this generator to automatically run with the `verb` command instead of `verb readme`, add the following to package.json:
 
-```json
+```javascript
 {
   "name": "my-project",
   "version": "0.1.0",
