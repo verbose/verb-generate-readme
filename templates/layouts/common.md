@@ -21,14 +21,15 @@ layout: nil
 {%= include("build-docs") %}
 
 ## Running tests
+{%= maybeInclude("coverage") %}
 {%= include("tests") %}
 
 ## Author
-{%= include("author") %}
+{%= includeEither("authors", "author") %}
 
 ## License
 {%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
-{%= license %}
+{%= before.license ? (before.license + "\n") : "" %}{%= license %}{%= after.license ? (after.license + "\n") : "" %}
 
 ***
 
