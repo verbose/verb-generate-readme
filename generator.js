@@ -94,6 +94,7 @@ module.exports = function generator(app, base) {
         console.log(obj.filename + ' | ' + obj.message);
       });
     });
+
     diff('middleware');
     cb();
   });
@@ -138,11 +139,15 @@ module.exports = function generator(app, base) {
    */
 
   app.task('new', function() {
-    var dest = app.option('dest') || app.cwd;
-    app.file('.verb.md', readTemplate(app, 'verbmd/basic.md'));
+    var dest = path.resolve(app.option('dest') || app.cwd);
+    var file = app.file('.verb.md', readTemplate(app, 'verbmd/basic.md'));
     return app.toStream('files')
       .pipe(app.conflicts(dest))
-      .pipe(app.dest(dest));
+      .pipe(app.dest(function(file) {
+        file.base = dest;
+        file.path = path.resolve(file.base, '.verb.md');
+        return dest;
+      }))
   });
 
   /**

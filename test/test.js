@@ -23,20 +23,21 @@ function Verb(options) {
 Assemble.extend(Verb);
 
 function exists(name, cb) {
-  var filepath = path.resolve(__dirname, 'actual', name);
-  var dir = path.dirname(filepath);
+  var actual = path.resolve(__dirname, 'actual');
+  var filepath = path.resolve(actual, name);
   return function(err) {
     if (err) return cb(err);
 
     fs.stat(filepath, function(err, stat) {
       if (err) return cb(err);
-      // del(dir, {force: true}, cb);
-      cb()
+      del(actual, {force: true}, cb);
     });
   }
 }
 
 describe('verb-readme-generator', function() {
+  this.slow(300);
+
   before(function() {
     process.chdir(path.resolve(__dirname, 'fixtures'));
   });
@@ -116,6 +117,7 @@ describe('verb-readme-generator', function() {
     });
 
     it('should run the `new` task', function(cb) {
+      app.option('dest', path.resolve(__dirname, 'actual'));
       app.register('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });
@@ -138,6 +140,7 @@ describe('verb-readme-generator', function() {
     });
 
     it('should run the `new` task', function(cb) {
+      app.option('dest', path.resolve(__dirname, 'actual'));
       app.register('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });
@@ -198,16 +201,6 @@ describe('verb-readme-generator', function() {
 
       app.register('readme', assertVariable('verbFooGenerator'));
       app.generate('readme', cb);
-    });
-
-    it('should run the `default` task', function(cb) {
-      app.register('readme', generator);
-      app.generate('readme:default', exists('README.md', cb));
-    });
-
-    it('should run the `new` task', function(cb) {
-      app.register('readme', generator);
-      app.generate('readme:new', exists('.verb.md', cb));
     });
   });
 });
