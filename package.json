@@ -17,21 +17,21 @@
   ],
   "main": "index.js",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4.0"
   },
   "scripts": {
     "test": "mocha"
   },
   "dependencies": {
     "async": "^1.5.2",
-    "base-fs-conflicts": "^0.1.2",
+    "base-fs-conflicts": "^0.1.6",
     "camel-case": "^1.2.2",
     "debug": "^2.2.0",
-    "delete": "^0.3.1",
+    "delete": "^0.3.2",
     "fs-exists-sync": "^0.1.0",
     "get-value": "^2.0.5",
-    "lazy-cache": "^2.0.0",
-    "log-utils": "^0.1.3",
+    "lazy-cache": "^2.0.1",
+    "log-utils": "^0.1.4",
     "match-file": "^0.2.0",
     "resolve": "^1.1.7",
     "sections": "^0.1.8",
@@ -39,13 +39,15 @@
     "update-sections": "^0.1.0",
     "verb-collections": "^0.1.4",
     "verb-defaults": "^0.1.0",
-    "verb-repo-data": "^0.1.7",
+    "verb-repo-data": "^0.1.8",
     "verb-repo-helpers": "^0.1.3",
-    "verb-toc": "^0.2.1"
+    "verb-toc": "^0.2.2"
   },
   "devDependencies": {
-    "assemble-core": "^0.17.1",
-    "base-pkg": "^0.2.2",
+    "assemble-core": "^0.17.2",
+    "assemble-loader": "^0.4.0",
+    "base-generators": "^0.2.11",
+    "base-pipeline": "^0.2.5",
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
     "gulp-format-md": "^0.1.9",
@@ -81,7 +83,8 @@
         "verb-toc"
       ]
     },
-    "toc": false,
+    "toc": true,
+    "sections": false,
     "layout": "default-dev",
     "tasks": [
       "readme"
