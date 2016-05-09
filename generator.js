@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var cwd = path.resolve.bind(path, __dirname);
 var debug = require('debug')('base:verb:verb-readme-generator');
 var helpers = require('./lib/helpers');
 var utils = require('./lib/utils');
@@ -13,28 +14,24 @@ var lint = require('./lib/lint');
 
 module.exports = function generator(app, base) {
   if (!isValidInstance(app)) return;
+  debug('initializing <%s>, called from <%s>', __filename, module.parent.id);
 
   if (typeof app.pkg === 'undefined') {
     throw new Error('expected the base-pkg plugin to be registered');
   }
-  if (typeof app.cwd === 'undefined') {
-    app.cwd = process.cwd();
-  }
-
-  debug('initializing <%s>, called from <%s>', __filename, module.parent.id);
 
   /**
    * Begin timings (`verb --times`)
    */
 
-  if (app.enabled('times')) app.enable('logTimeDiffs');
-  if (!app.enabled('logTimeDiffs') && !app.enabled('logDiff')) {
-    app.disable('logTimeDiffs');
-  }
 
   var time = new utils.Time();
+  if (!app.enabled('times')) {
+    app.disable('logDiff');
+  }
+
   var diff = time.diff('verb-readme-generator', app.options);
-  diff('start');
+  diff('start', app.options);
 
   /**
    * Set options
@@ -44,12 +41,16 @@ module.exports = function generator(app, base) {
   app.option('engineOpts', {delims: ['{%', '%}']});
   app.option('viewEngine', '*');
   app.option('toAlias', function readme(name) {
-    if (/^verb-.*?-[\w]+/.test(name)) {
-      return name.replace(/^verb-(.*?)-[\w]+/, '$1');
+    if (/^verb-.*?-\w/.test(name)) {
+      return name.replace(/^verb-(.*?)-(?:\w+)/, '$1');
     }
     return name.slice(name.lastIndexOf('-') + 1);
   });
   diff('options');
+
+  function dir(name) {
+    return app.option(name) || cwd(name);
+  }
 
   /**
    * Plugins
@@ -98,8 +99,7 @@ module.exports = function generator(app, base) {
   });
 
   /**
-   * [Silent]() task that loads data to used for rendering templates. Called by
-   * the [readme]() task.
+   * Loads data to used for rendering templates. Called by the [readme]() task.
    *
    * ```sh
    * $ verb readme:data
@@ -128,10 +128,28 @@ module.exports = function generator(app, base) {
   });
 
   /**
-   * [Silent]() task that loads the `.verb.md` in the user's current working directory.
-   * If no `.verb.md` file exists, the [prompt-verbmd)() task is called to ask the user
-   * if they want to add the file. Disable the prompt by passing `--verbmd=false` on the
-   * command line, or `app.disable('verbmd')` via API.
+   * Add a `.verb.md` template to the current working directory.
+   *
+   * ```sh
+   * $ verb readme:new
+   * ```
+   * @name new
+   * @api public
+   */
+
+  app.task('new', function() {
+    var dest = app.option('dest') || app.cwd;
+    app.file('.verb.md', readTemplate(app, 'verbmd/basic.md'));
+    return app.toStream('files')
+      .pipe(app.conflicts(dest))
+      .pipe(app.dest(dest));
+  });
+
+  /**
+   * Load the `.verb.md` in the user's current working directory. If no `.verb.md`
+   * file exists, the [prompt-verbmd)() task is called to ask the user if they want to
+   * add the file. Disable the prompt by passing `--verbmd=false` on the command line,
+   * or `app.disable('verbmd')` via API.
    *
    * ```sh
    * $ verb readme:verbmd
@@ -143,19 +161,15 @@ module.exports = function generator(app, base) {
   app.task('verbmd', { silent: true }, function(cb) {
     debug('loading .verb.md');
 
-    if (app.views.files['README'] || app.views.files['.verb']) {
+    if (app.views.files['README'] || app.views.files['.verb'] || app.options.verbmd === false) {
       cb();
       return;
     }
 
-    // try to load .verb.md from user cwd
-    if (utils.exists(path.resolve(app.cwd, '.verb.md'))) {
-      app.file('README.md', {contents: read(app, '.verb.md', app.cwd)});
-      cb();
-      return;
-    }
-
-    if (app.options.verbmd === false) {
+    // try to load ".verb.md" or custom file from user cwd
+    var readme = path.resolve(app.cwd, app.option('readme') || '.verb.md');
+    if (utils.exists(readme)) {
+      app.file('README.md', readTemplate(app, readme, app.cwd));
       cb();
       return;
     }
@@ -179,7 +193,7 @@ module.exports = function generator(app, base) {
     app.confirm('verbmd', 'Can\'t find a .verb.md, want to add one?');
     app.ask('verbmd', { save: false }, function(err, answers) {
       if (err) return cb(err);
-      if (answers.verbmd === true) {
+      if (answers.verbmd) {
         app.build('new', cb);
       } else {
         cb();
@@ -203,23 +217,6 @@ module.exports = function generator(app, base) {
   app.task('ask', ['prompt-verbmd']);
 
   /**
-   * Add a `.verb.md` template to the current working directory.
-   *
-   * ```sh
-   * $ verb readme:new
-   * ```
-   * @name new
-   * @api public
-   */
-
-  app.task('new', function() {
-    app.file('.verb.md', { contents: read(app, 'verbmd/basic.md') });
-    return app.toStream('files')
-      .pipe(app.conflicts(app.cwd))
-      .pipe(app.dest(app.cwd));
-  });
-
-  /**
    * Load layouts, includes and badges commonly used for generating a README.md.
    *
    * ```sh
@@ -231,16 +228,22 @@ module.exports = function generator(app, base) {
 
   app.task('templates', { silent: true }, function(cb) {
     debug('loading templates');
+
+    app.option('renameKey', function(key, file) {
+      return file ? file.basename : path.basename(key);
+    });
+
+    // load `docs` templates in user cwd
     app.docs('*.md', {cwd: path.resolve(app.cwd, 'docs')});
 
-    // load layout templates
+    // load `layout` templates
     app.layouts('templates/layouts/*.md', { cwd: __dirname });
 
-    // load include templates
+    // load `include` templates
     app.includes('templates/includes/**/*.md', { cwd: __dirname });
     app.includes(require('./templates/includes'));
 
-    // load badges
+    // load `badges` templates
     app.badges(require('./templates/badges'));
 
     // done
@@ -262,17 +265,15 @@ module.exports = function generator(app, base) {
 
   app.task('readme', {silent: true}, ['middleware', 'templates', 'verbmd', 'data'], function(cb) {
     debug('starting readme task');
-    var readme = app.options.readme || 'readme';
+    var readme = path.resolve(app.cwd, app.option('readme') || '.verb.md');
+    var dest = path.resolve(app.option('dest') || app.cwd);
 
-    app.toStream('files', utils.filter(readme))
-      .on('error', console.log)
-      .pipe(app.renderFile('*', app.cache.data))
-      .on('error', console.log)
-      .pipe(app.pipeline(app.options.pipeline))
-      .on('error', console.log)
+    app.toStream('files', utils.filter(readme)).on('error', cb)
+      .pipe(app.renderFile('*', app.cache.data)).on('error', cb)
+      .pipe(app.pipeline(app.options.pipeline)).on('error', cb)
       .pipe(app.dest(function(file) {
         file.basename = 'README.md';
-        return app.options.dest || app.cwd;
+        return dest;
       }))
       .on('error', cb)
       .on('end', function() {
@@ -304,13 +305,17 @@ module.exports = function generator(app, base) {
  *
  * @param {Object} `verb`
  * @param {String} `fp`
- * @param {String} `cwd`
+ * @param {String} `base`
  * @return {String}
  */
 
-function read(app, fp, cwd) {
-  cwd = cwd || app.env.templates || path.join(__dirname, 'templates');
-  return fs.readFileSync(path.resolve(cwd, fp));
+function readTemplate(app, filepath, base) {
+  var dir = base || app.env.templates || path.join(__dirname, 'templates');
+  var absolute = path.resolve(path.resolve(dir), filepath);
+  return {
+    contents: fs.readFileSync(absolute),
+    path: absolute,
+  };
 }
 
 /**
