@@ -16,10 +16,6 @@ module.exports = function generator(app, base) {
   if (!isValidInstance(app)) return;
   debug('initializing <%s>, called from <%s>', __filename, module.parent.id);
 
-  if (typeof app.pkg === 'undefined') {
-    throw new Error('expected the base-pkg plugin to be registered');
-  }
-
   /**
    * Begin timings (`verb --times`)
    */
@@ -46,6 +42,7 @@ module.exports = function generator(app, base) {
     }
     return name.slice(name.lastIndexOf('-') + 1);
   });
+
   diff('options');
 
   function dir(name) {
@@ -62,6 +59,9 @@ module.exports = function generator(app, base) {
   app.use(require('verb-repo-helpers'));
   app.use(require('verb-repo-data'));
   app.use(require('verb-toc'));
+  app.use(utils.questions());
+  app.use(utils.loader());
+  app.use(utils.pkg());
   diff('plugins');
 
   /**
@@ -111,6 +111,8 @@ module.exports = function generator(app, base) {
 
   app.task('data', { silent: true }, function(cb) {
     debug('loading data');
+
+    app.data({verb: {}});
 
     if (utils.exists(path.join(app.cwd, 'bower.json'))) {
       app.data({bower: true});
@@ -235,7 +237,8 @@ module.exports = function generator(app, base) {
     debug('loading templates');
 
     app.option('renameKey', function(key, file) {
-      return file ? file.basename : path.basename(key);
+      var name = file ? file.relative : path.relative(app.cwd, key);
+      return name.replace(/^templates\/?(layouts|includes)\/?/, '');
     });
 
     // load `docs` templates in user cwd
