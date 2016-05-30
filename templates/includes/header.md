@@ -1,3 +1,3 @@
-# {%= name %} {%= badge('npm') %} {%= badge('downloads') %} {%= badge('travis') %}
+# {%= name %} {%= badge('npm') %} {%= badge('downloads') %} {%= ifExists(["test", "test.js"], badge('travis')) %}
 
 {%= description %}
