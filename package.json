@@ -33,11 +33,12 @@
     "delete": "^0.3.2",
     "fs-exists-sync": "^0.1.0",
     "get-value": "^2.0.5",
+    "is-registered": "^0.1.4",
+    "is-valid-instance": "^0.1.0",
     "lazy-cache": "^2.0.1",
     "log-utils": "^0.1.4",
     "match-file": "^0.2.0",
     "sections": "^0.1.8",
-    "time-diff": "^0.3.1",
     "update-sections": "^0.1.0",
     "verb-collections": "^0.1.4",
     "verb-defaults": "^0.1.0",
@@ -69,11 +70,13 @@
     "verbgenerator"
   ],
   "verb": {
+    "toc": true,
+    "layout": "default-dev",
+    "tasks": [
+      "readme"
+    ],
     "plugins": [
       "gulp-format-md"
-    ],
-    "reflinks": [
-      "verb"
     ],
     "related": {
       "highlight": "generate",
@@ -84,11 +87,12 @@
         "verb-toc"
       ]
     },
-    "toc": true,
+    "reflinks": [
+      "verb"
+    ],
     "sections": false,
-    "layout": "default-dev",
-    "tasks": [
-      "readme"
-    ]
+    "lint": {
+      "reflinks": true
+    }
   }
 }
