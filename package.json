@@ -31,6 +31,7 @@
     "camel-case": "^1.2.2",
     "debug": "^2.2.0",
     "delete": "^0.3.2",
+    "engine-handlebars": "^0.8.0",
     "fs-exists-sync": "^0.1.0",
     "get-value": "^2.0.5",
     "is-registered": "^0.1.4",
