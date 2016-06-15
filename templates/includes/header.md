@@ -1,3 +1,7 @@
 # {%= name %} {%= badge('npm') %} {%= badge('downloads') %} {%= ifExists(["test", "test.js"], badge('travis')) %}
 
-{%= description %}
+{%= ifExists('docs/logo.png', include('logo')) %}
+
+{%= section("about", description) %}
+
+{%= include("highlight") %}

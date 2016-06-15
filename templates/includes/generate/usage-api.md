@@ -1,3 +1,9 @@
+This updater can also be used as a node.js library in your own updater. To do so you must first install {%= name %} locally.
+
+**Install**
+
+{%= include("install-npm", {save: true}) %}
+
 **Use as a plugin in your generator**
 
 Use as a plugin if you want to extend your own generator with the features, settings and tasks of {%= name %}, as if they were created on your generator.

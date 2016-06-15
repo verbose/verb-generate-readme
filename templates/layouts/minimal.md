@@ -4,11 +4,11 @@ layout: nil
 {% body %}
 
 ## Author
-{%= include("author") %}
+{%= includeEither("authors", "author") %}
 
 ## License
-{%= copyright({linkify: true}) %}
-{%= license %}
+{%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
+{%= before.license ? (before.license + "\n") : "" %}{%= license %}{%= after.license ? (after.license + "\n") : "" %}
 
 ***
 

@@ -1,4 +1,4 @@
-**Install generate locally**
+**Install locally**
 
 {%= include("install-npm", {save: true}) %}
 
