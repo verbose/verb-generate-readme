@@ -1,0 +1,1 @@
+Please read the [contributing guide]({%= contributingPath %}) for avice on opening issues, pull requests, and coding standards.

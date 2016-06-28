@@ -7,13 +7,11 @@ layout: common
 
 {% body %}
 
-## Docs
-
-### CLI
+## CLI
 {%= include("generate/usage-cli.md") %}
 
-### Tasks
+## Tasks
 {%= section("tasks") %}
 
-### API
+## API
 {%= include("generate/usage-api.md") %}

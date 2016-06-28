@@ -1,16 +1,22 @@
-To use the CLI, install [generate][] if it isn't already installed:
+**Install generate**
+
+To use [generate][] from the command line, it must first be installed globally with npm:
 
 ```sh
 $ npm install --global generate
 ```
 
-Install the `{%= name %}` generator:
+**Install `{%= name %}`**
+
+Next, install this generator:
 
 ```sh
 $ npm install --global {%= name %}
 ```
 
-Run `{%= name %}` to {%= msg %}:
+**Run**
+
+You should now be able to run this generator with the following command:
 
 ```sh
 $ gen {%= alias %}

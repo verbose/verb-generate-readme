@@ -1,7 +1,23 @@
 ---
 layout: nil
 ---
+
+{%= include("header") %}
+
+## TOC
+<!-- toc -->
+
 {% body %}
+
+## Related projects
+{%= include("related-list") %}
+
+## Contributing
+{%= include("contributing") %}
+
+## Running tests
+{%= maybeInclude("coverage") %}
+{%= include("tests") %}
 
 ## Author
 {%= includeEither("authors", "author") %}
