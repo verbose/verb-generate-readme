@@ -31,6 +31,8 @@ function generator(app, base) {
    */
 
   var cwd = path.resolve.bind(path, app.cwd);
+  // get verb config object from package.json
+  var config = app.base.get('cache.config');
 
   /**
    * Helpers
@@ -54,10 +56,6 @@ function generator(app, base) {
     }
     return name.slice(name.lastIndexOf('-') + 1);
   });
-
-  // update config object from `app.config.process()`, which processes
-  // config values in package.json
-  var config = app.base.get('cache.config');
 
   /**
    * Plugins
