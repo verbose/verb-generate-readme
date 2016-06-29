@@ -32,7 +32,7 @@ function generator(app, base) {
 
   var cwd = path.resolve.bind(path, app.cwd);
   // get verb config object from package.json
-  var config = app.base.get('cache.config');
+  var config = app.base.get('cache.config') || {};
 
   /**
    * Helpers
@@ -260,7 +260,7 @@ function generator(app, base) {
 
     // load `docs` templates in user cwd
     app.docs('*.md', {cwd: templates('docs')});
-    if (utils.exists(cwd('docs')) && !app.pkg.get('verb.docs') === false) {
+    if (utils.exists(cwd('docs')) && app.pkg.get('verb.docs') !== false) {
       app.docs('*.md', {cwd: path.resolve(app.cwd, 'docs')});
     }
 
