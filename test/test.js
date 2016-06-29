@@ -209,6 +209,9 @@ function assertVariable(expected) {
   return function() {
     this.use(generator);
     this.postRender(/./, function(file, next) {
+      if (file.engine !== 'md') {
+        return next();
+      }
       assert.equal(file.content, expected);
       next();
     });
