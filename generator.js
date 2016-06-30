@@ -109,7 +109,6 @@ function generator(app, base) {
     debug('loading data');
 
     // temporary data
-    app.data({verb: {}});
     app.data({
       links: {
         verb: {
@@ -129,6 +128,16 @@ function generator(app, base) {
         }
       }
     });
+
+    if (!app.cache.data.verb) {
+      app.data({verb: {}});
+    }
+
+    if (!app.get('cache.data.verb.related.list')) {
+      app.data({
+        verb: {related: {list: []}}
+      });
+    }
 
     if (utils.exists(cwd('bower.json'))) {
       app.data({bower: true});
