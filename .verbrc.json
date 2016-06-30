@@ -1,0 +1,25 @@
+{
+  "data": {
+    "cli": {
+      "tasks": {
+        "readme": {
+          "description": "Run the `readme` task. Builds a `README.md` file from a `.verb.md` template. If a `.verb.md` file does not exist, verb will ask if you'd like to add one.",
+          "example": "examples/readme.md"
+        },
+        "new": {
+          "description": "Generates a basic `.verb.md` file in the specified directory or current working directory.",
+          "example": "examples/readme.md"
+        },
+        "ask": {
+          "description": "Asks you if you'd like to add a `.verb.md` template to your project. If `yes`, the `new` task is called, otherwise nothing.",
+          "example": "examples/readme.md"
+        }
+      },
+      "flags": {
+        "--times": {
+          "description": "Display load times in the console."
+        }
+      }
+    }
+  }
+}
