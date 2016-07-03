@@ -13,15 +13,15 @@ To contribute a helper to the [github.com/helpers][helpers] org, follow these st
 
 Install [generate][] and [generate-helper][]:
 
-```bash
-npm i -g generate generate-helper
+```sh
+npm install --global generate generate-helper
 ```
 
 ### 2. Generate your project
 
 To initialize the project, including documentation and unit tests, in the command line, run:
 
-```bash
+```sh
 gen helper
 ```
 
