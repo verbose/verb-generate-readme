@@ -133,7 +133,7 @@ function generator(app, base) {
       app.data({verb: {}});
     }
 
-    if (!app.get('cache.data.verb.related.list')) {
+    if (!app.has('cache.data.verb.related.list')) {
       app.data({
         verb: {related: {list: []}}
       });
@@ -269,7 +269,7 @@ function generator(app, base) {
 
     // load `docs` templates in user cwd
     app.docs('*.md', {cwd: templates('docs')});
-    if (utils.exists(cwd('docs')) && app.pkg.get('verb.docs') !== false) {
+    if (utils.exists(cwd('docs')) && app.pkg.get('verb.options.docs') !== false) {
       app.docs('*.md', {cwd: path.resolve(app.cwd, 'docs')});
     }
 
