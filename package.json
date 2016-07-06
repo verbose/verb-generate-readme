@@ -39,7 +39,7 @@
     "engine-handlebars": "^0.8.0",
     "fs-exists-sync": "^0.1.0",
     "get-value": "^2.0.6",
-    "gulp-reflinks": "^0.1.0",
+    "gulp-reflinks": "^0.1.4",
     "has-value": "^0.3.1",
     "is-valid-app": "^0.2.0",
     "lazy-cache": "^2.0.1",
