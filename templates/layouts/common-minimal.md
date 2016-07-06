@@ -9,20 +9,21 @@ layout: nil
 
 {% body %}
 
-## Related projects
+## About
+### Related projects
 {%= include("related-list") %}
 
-## Contributing
+### Contributing
 {%= include("contributing") %}
 
-## Running tests
+### Running tests
 {%= maybeInclude("coverage") %}
 {%= include("tests") %}
 
-## Author
+### Author
 {%= includeEither("authors", "author") %}
 
-## License
+### License
 {%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
 {%= license %}
 
