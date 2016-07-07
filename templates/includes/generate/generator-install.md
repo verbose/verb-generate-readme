@@ -1,14 +1,16 @@
-**Install Generate**
+**Installing the CLI**
 
-If you haven't already installed [Generate][] globally, you can do that now with the following command:
+To run the `{%= strip(platform.name + '-', name) %}` generator from the command line, you'll need to install [generate][] globally first. You can do that now with the following command:
 
 ```sh
 $ npm install --global generate
 ```
 
+This adds the `gen` command to your system path, allowing it to be run from any directory.
+
 **Install {%= name %}**
 
-Then install this module:
+You may now install this module with the following command:
 
 ```sh
 $ npm install --global {%= name %}

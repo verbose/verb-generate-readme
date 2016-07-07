@@ -2,6 +2,6 @@
 
 {%= ifExists('docs/logo.png', include('logo')) %}
 
-{%= section("about", description) %}
+{%= description %}
 
 {%= include("highlight") %}

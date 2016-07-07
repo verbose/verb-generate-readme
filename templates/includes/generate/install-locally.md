@@ -2,9 +2,8 @@
 
 {%= include("install-npm", {save: true}) %}
 
-
 Then use in your project:
 
 ```js
-var {%= alias %} = require('{%= name %}');
+var {%= strip(platform.name + '-', name) %} = require('{%= name %}');
 ```
