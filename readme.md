@@ -1,4 +1,4 @@
-# verb-readme-generator [![NPM version](https://img.shields.io/npm/v/verb-readme-generator.svg?style=flat)](https://www.npmjs.com/package/verb-readme-generator) [![NPM downloads](https://img.shields.io/npm/dm/verb-readme-generator.svg?style=flat)](https://npmjs.org/package/verb-readme-generator) [![Build Status](https://img.shields.io/travis/verbose/verb-readme-generator.svg?style=flat)](https://travis-ci.org/verbose/verb-readme-generator)
+# verb-generate-readme [![NPM version](https://img.shields.io/npm/v/verb-generate-readme.svg?style=flat)](https://www.npmjs.com/package/verb-generate-readme) [![NPM downloads](https://img.shields.io/npm/dm/verb-generate-readme.svg?style=flat)](https://npmjs.org/package/verb-generate-readme) [![Build Status](https://img.shields.io/travis/verbose/verb-generate-readme.svg?style=flat)](https://travis-ci.org/verbose/verb-generate-readme)
 
 Generate your project's readme with verb. Requires verb v0.9.0 or higher.
 
@@ -9,7 +9,7 @@ You might also be interested in [generate](https://github.com/generate/generate)
 Install as a `devDependency` with [npm](https://www.npmjs.com/):
 
 ```sh
-$ npm install --save-dev verb-readme-generator
+$ npm install --save-dev verb-generate-readme
 ```
 
 ## Heads up!
@@ -38,7 +38,7 @@ Each time the `verb` command is run, verb's CLI looks for a `verbfile.js` in the
 
 **.verb.md**
 
-If `verb-readme-generator` is installed (locally or globally), and a `verbfile.js` is not found, verb's CLI looks for a `.verb.md` readme template in the user's current working directory. If found, verb will render the file to create a `README.md` using data from the user's environment, such as `package.json` and `.git` config (for username, if necessary).
+If `verb-generate-readme` is installed (locally or globally), and a `verbfile.js` is not found, verb's CLI looks for a `.verb.md` readme template in the user's current working directory. If found, verb will render the file to create a `README.md` using data from the user's environment, such as `package.json` and `.git` config (for username, if necessary).
 
 Visit the [verb](https://github.com/verbose/verb) project to learn more.
 
@@ -46,7 +46,7 @@ Visit the [verb](https://github.com/verbose/verb) project to learn more.
 
 **Installing the CLI**
 
-To run the `readme` generator from the command line, you'll need to install [verb](https://github.com/verbose/verb) globally first. You can that now with the following command:
+To run the `verb-readme` generator from the command line, you'll need to install [verb](https://github.com/verbose/verb) globally first. You can that now with the following command:
 
 ```sh
 $ npm install --global verb
@@ -54,14 +54,14 @@ $ npm install --global verb
 
 This adds the `verb` command to your system path, allowing it to be run from any directory. Visit the [verb](https://github.com/verbose/verb) project and documentation to learn more.
 
-**Run the `readme` generator from the command line**
+**Run the `verb-readme` generator from the command line**
 
-Once both [verb](https://github.com/verbose/verb) and `verb-readme-generator` are installed globally, you can run the generator with the following command:
+Once both [verb](https://github.com/verbose/verb) and `verb-generate-readme` are installed globally, you can run the generator with the following command:
 
-Run the `readme` generator from the command line:
+Run the `verb-readme` generator from the command line:
 
 ```sh
-$ verb readme
+$ verb verb-readme
 ```
 
 ## Tasks
@@ -323,7 +323,7 @@ As with all templates, you can easily override these and/or define your own temp
 The following layouts are available:
 
 * `default`: a layout with installation, tests, author, usage, related list, contributing and license sections.
-* `global`: same as default, but with global npm installation instructions (verb-readme-generator uses this layout)
+* `global`: same as default, but with global npm installation instructions (verb-generate-readme uses this layout)
 * `empty`: noop layout. no content is applied, but all layout-related middleware stages will still run.
 
 Layouts can be defined on a template-by-template basic, and even for includes. If you need more granularity just add a `verbfile.js` with your custom code.
@@ -373,7 +373,7 @@ $ npm install -d && npm test
 ## License
 
 Copyright © 2016, [Jon Schlinkert](https://github.com/jonschlinkert).
-Released under the [MIT license](https://github.com/verbose/verb-readme-generator/blob/master/LICENSE).
+Released under the [MIT license](https://github.com/verbose/verb-generate-readme/blob/master/LICENSE).
 
 ***
 
