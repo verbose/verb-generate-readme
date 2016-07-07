@@ -6,6 +6,7 @@ var path = require('path');
 var assert = require('assert');
 var del = require('delete');
 // var verb = require('verb');
+var isValid = require('is-valid-app');
 var Assemble = require('assemble-core');
 var generators = require('base-generators');
 var pipeline = require('base-pipeline');
@@ -22,15 +23,17 @@ function Verb(options) {
 }
 Assemble.extend(Verb);
 
+var fixtures = path.resolve.bind(path, __dirname, 'fixtures');
+var actual = path.resolve.bind(path, __dirname, 'actual');
+
 function exists(name, cb) {
-  var actual = path.resolve(__dirname, 'actual');
-  var filepath = path.resolve(actual, name);
+  var filepath = actual(name);
   return function(err) {
     if (err) return cb(err);
 
     fs.stat(filepath, function(err, stat) {
       if (err) return cb(err);
-      del(actual, {force: true}, cb);
+      del(actual(), {force: true}, cb);
     });
   }
 }
@@ -39,12 +42,13 @@ describe('verb-readme-generator', function() {
   this.slow(300);
 
   before(function() {
-    process.chdir(path.resolve(__dirname, 'fixtures'));
+    process.chdir(fixtures());
   });
 
   beforeEach(function() {
     app = new Verb({cli: true, silent: true});
-    app.option('dest', path.resolve(__dirname, 'actual'));
+    app.option('dest', actual());
+    app.option('cwd', fixtures());
     app.data('author.name', 'Jon Schlinkert');
   });
 
@@ -93,20 +97,18 @@ describe('verb-readme-generator', function() {
       var count = 0;
       app.register('foo', function(foo) {
         foo.use(generator);
+        assert(foo.tasks.hasOwnProperty('default'));
         count++;
       });
 
-      app.getGenerator('foo')
-        .generate('default', function(err) {
-          if (err) return cb(err);
-          assert.equal(count, 1);
-          cb();
-        });
+      app.getGenerator('foo');
+      cb();
     });
   });
 
   describe('generator', function() {
     it('should work as a generator', function(cb) {
+      app.cwd = fixtures();
       app.register('readme', generator);
       app.generate('readme', exists('README.md', cb));
     });
@@ -117,7 +119,7 @@ describe('verb-readme-generator', function() {
     });
 
     it('should run the `new` task', function(cb) {
-      app.option('dest', path.resolve(__dirname, 'actual'));
+      app.option('dest', actual());
       app.register('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });
@@ -140,7 +142,7 @@ describe('verb-readme-generator', function() {
     });
 
     it('should run the `new` task', function(cb) {
-      app.option('dest', path.resolve(__dirname, 'actual'));
+      app.option('dest', actual());
       app.register('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });
@@ -148,12 +150,12 @@ describe('verb-readme-generator', function() {
 
   describe('templates', function() {
     it('should use a custom readme path', function(cb) {
-      app.option('readme', path.resolve(__dirname, 'fixtures/foo.md'));
+      app.option('readme', fixtures('foo.md'));
 
       app.register('readme', generator);
       app.generate('readme', function(err) {
         if (err) return cb(err);
-        var filepath = path.resolve(__dirname, 'actual/README.md');
+        var filepath = actual('README.md');
         var str = fs.readFileSync(filepath, 'utf8');
         assert(/this is <%= name %>/.test(str));
         cb();
@@ -161,13 +163,13 @@ describe('verb-readme-generator', function() {
     });
 
     it('should use a custom readme dest', function(cb) {
-      app.option('readme', path.resolve(__dirname, 'fixtures/foo.md'));
-      app.option('dest', path.resolve(__dirname, 'actual/foo'));
+      app.option('readme', fixtures('foo.md'));
+      app.option('dest', actual('foo'));
 
       app.register('readme', generator);
       app.generate('readme', function(err) {
         if (err) return cb(err);
-        var filepath = path.resolve(__dirname, 'actual/foo/README.md');
+        var filepath = actual('foo/README.md');
         var str = fs.readFileSync(filepath, 'utf8');
         assert(/this is <%= name %>/.test(str));
         cb();
@@ -177,8 +179,8 @@ describe('verb-readme-generator', function() {
 
   describe('variables', function() {
     it('should set `name`', function(cb) {
-      app.option('readme', path.resolve(__dirname, 'fixtures/variable-name.md'));
-      app.option('dest', path.resolve(__dirname, 'actual'));
+      app.option('readme', fixtures('variable-name.md'));
+      app.option('dest', actual());
       app.data({name: 'verb-foo-generator'});
 
       app.register('readme', assertVariable('verb-foo-generator'));
@@ -186,8 +188,8 @@ describe('verb-readme-generator', function() {
     });
 
     it('should set `alias`', function(cb) {
-      app.option('readme', path.resolve(__dirname, 'fixtures/variable-alias.md'));
-      app.option('dest', path.resolve(__dirname, 'actual'));
+      app.option('readme', fixtures('variable-alias.md'));
+      app.option('dest', actual());
       app.data({name: 'verb-foo-generator'});
 
       app.register('readme', assertVariable('foo'));
@@ -195,8 +197,8 @@ describe('verb-readme-generator', function() {
     });
 
     it('should set `varname`', function(cb) {
-      app.option('readme', path.resolve(__dirname, 'fixtures/variable-varname.md'));
-      app.option('dest', path.resolve(__dirname, 'actual'));
+      app.option('readme', fixtures('variable-varname.md'));
+      app.option('dest', actual());
       app.data({name: 'verb-foo-generator'});
 
       app.register('readme', assertVariable('verbFooGenerator'));
