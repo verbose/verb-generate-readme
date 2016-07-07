@@ -68,7 +68,7 @@ $ verb readme
 
 The following tasks are defined on the generator.
 
-### [data](generator.js#L108)
+### [data](index.js#L126)
 
 Loads data to used for rendering templates. Called by the [readme](#readme) task.
 
@@ -78,7 +78,7 @@ Loads data to used for rendering templates. Called by the [readme](#readme) task
 $ verb readme:data
 ```
 
-### [new](generator.js#L168)
+### [new](index.js#L186)
 
 Add a `.verb.md` template to the current working directory.
 
@@ -88,7 +88,7 @@ Add a `.verb.md` template to the current working directory.
 $ verb readme:new
 ```
 
-### [verbmd](generator.js#L193)
+### [verbmd](index.js#L211)
 
 Load the `.verb.md` in the user's current working directory. If no `.verb.md` file exists, the [prompt-verbmd)() task is called to ask the user if they want to add the file. Disable the prompt by passing `--verbmd=false` on the command line, or `app.disable('verbmd')` via API.
 
@@ -98,7 +98,7 @@ Load the `.verb.md` in the user's current working directory. If no `.verb.md` fi
 $ verb readme:verbmd
 ```
 
-### [prompt-verbmd](generator.js#L222)
+### [prompt-verbmd](index.js#L240)
 
 Prompts the user to add a new `.verb.md` template to the current working directory. Useful in sub-generators.
 
@@ -108,7 +108,7 @@ Prompts the user to add a new `.verb.md` template to the current working directo
 $ verb readme:prompt-verbmd
 ```
 
-### [ask](generator.js#L248)
+### [ask](index.js#L266)
 
 User-friendly alias for the [prompt-verbmd](#prompt-verbmd) task. _(This task is aliased with both a terse and long-form name so that in the case this generator is inherited by another and the generator already has an `ask` task, the `prompt-verbmd` task will still be available to use via API.)_
 
@@ -118,7 +118,7 @@ User-friendly alias for the [prompt-verbmd](#prompt-verbmd) task. _(This task is
 $ verb readme:ask
 ```
 
-### [templates](generator.js#L260)
+### [templates](index.js#L278)
 
 Load layouts, includes and badges commonly used for generating a README.md.
 
@@ -128,7 +128,7 @@ Load layouts, includes and badges commonly used for generating a README.md.
 $ verb readme:templates
 ```
 
-### [setup](generator.js#L313)
+### [setup](index.js#L331)
 
 Load `options`, `plugins`, `middleware` and `data` before calling a task to render templats.
 
@@ -138,7 +138,7 @@ Load `options`, `plugins`, `middleware` and `data` before calling a task to rend
 $ verb readme:setup
 ```
 
-### [readme](generator.js#L326)
+### [readme](index.js#L344)
 
 Generate a README.md from a `.verb.md` template. Runs the [middleware](#middleware), [templates](#templates), and [data](#data) tasks. This is a [verb](#verb/docs/tasks/#silent) task.
 
@@ -148,7 +148,7 @@ Generate a README.md from a `.verb.md` template. Runs the [middleware](#middlewa
 $ verb readme
 ```
 
-### [default](generator.js#L365)
+### [default](index.js#L383)
 
 Alias for the [readme](#readme) task, generates a README.md to the user's working directory.
 
@@ -334,7 +334,7 @@ You might also be interested in these projects:
 
 * [verb](https://www.npmjs.com/package/verb): Documentation generator for GitHub projects. Verb is extremely powerful, easy to use, and is used… [more](https://github.com/verbose/verb) | [homepage](https://github.com/verbose/verb "Documentation generator for GitHub projects. Verb is extremely powerful, easy to use, and is used on hundreds of projects of all sizes to generate everything from API docs to readmes.")
 * [verb-collections](https://www.npmjs.com/package/verb-collections): Verb plugin that adds includes, layouts, badges and docs template collections. Can be used with… [more](https://github.com/verbose/verb-collections) | [homepage](https://github.com/verbose/verb-collections "Verb plugin that adds includes, layouts, badges and docs template collections. Can be used with verb, assemble or generate, in a `*file.js`, or a globally installed generator.")
-* [verb-data](https://www.npmjs.com/package/verb-data): Verb plugin that adds commonly needed data to the context for rendering templates. | [homepage](https://github.com/jonschlinkert/verb-data "Verb plugin that adds commonly needed data to the context for rendering templates.")
+* [verb-repo-data](https://www.npmjs.com/package/verb-repo-data): Verb plugin that adds repository and package.json data to the context for rendering templates. | [homepage](https://github.com/verbose/verb-repo-data "Verb plugin that adds repository and package.json data to the context for rendering templates.")
 * [verb-toc](https://www.npmjs.com/package/verb-toc): Verb plugin that adds middleware for creating and injecting a table of contents into a… [more](https://github.com/verbose/verb-toc) | [homepage](https://github.com/verbose/verb-toc "Verb plugin that adds middleware for creating and injecting a table of contents into a markdown document.")
 
 ## Contributing
@@ -377,4 +377,4 @@ Released under the [MIT license](https://github.com/verbose/verb-readme-generato
 
 ***
 
-_This file was generated by [verb](https://github.com/verbose/verb), v0.9.0, on July 06, 2016._
+_This file was generated by [verb](https://github.com/verbose/verb), v0.9.0, on July 07, 2016._
