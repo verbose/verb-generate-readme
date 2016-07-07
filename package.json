@@ -10,7 +10,6 @@
   },
   "license": "MIT",
   "files": [
-    "generator.js",
     "index.js",
     "lib",
     "LICENSE",
@@ -97,11 +96,12 @@
       "list": [
         "verb",
         "verb-collections",
-        "verb-data",
+        "verb-repo-data",
         "verb-toc"
       ]
     },
     "reflinks": [
+      "gulp",
       "verb",
       "verb-readme-generator"
     ],
