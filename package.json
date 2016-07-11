@@ -47,7 +47,7 @@
     "match-file": "^0.2.0",
     "resolve": "^1.1.7",
     "sections": "^0.1.8",
-    "template-helpers": "^0.6.4",
+    "template-helpers": "^0.6.5",
     "update-sections": "^0.1.0",
     "verb-collections": "^0.1.4",
     "verb-defaults": "^0.1.0",
