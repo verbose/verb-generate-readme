@@ -23,11 +23,6 @@ function generator(app, base) {
   app.engine('hbs', require('engine-handlebars'));
   app.handler('prePipeline');
 
-  app.on('error', function(err) {
-    console.log(err);
-    process.exit(1);
-  });
-
   /**
    * User's CWD
    */
@@ -59,10 +54,6 @@ function generator(app, base) {
     return name.slice(name.lastIndexOf('-') + 1);
   });
 
-  /**
-   * Plugins
-   */
-
   app.option('linkify', function(token, name, slug, tocOpts) {
     if (/[{<]%=?/.test(name)) {
       var inst = new app.constructor();
@@ -77,7 +68,11 @@ function generator(app, base) {
     }
     toc.linkify(token, name, slug, tocOpts);
     return token;
-  })
+  });
+
+  /**
+   * Plugins
+   */
 
   app.use(utils.conflicts());
   app.use(require('verb-defaults'));
