@@ -85,10 +85,40 @@ function generator(app, base) {
   app.use(utils.pkg());
 
   /**
-   * Middleware
+   * Generate `README.md` and fix missing [reflinks](#reflinks).
+   *
+   * ```sh
+   * $ verb readme
+   * ```
+   * @name readme
+   * @api public
    */
 
-  app.task('middleware', { silent: true }, function(cb) {
+  app.task('readme', ['readme-build', 'readme-reflinks']);
+
+  /**
+   * Alias for the [readme]() task, generates a README.md to the user's working directory.
+   *
+   * ```sh
+   * $ verb readme
+   * ```
+   * @name default
+   * @api public
+   */
+
+  app.task('default', {silent: true}, ['readme']);
+
+  /**
+   * Initialize middleware used for rendering the [readme](#readme).
+   *
+   * ```sh
+   * $ verb readme:readme-middleware
+   * ```
+   * @name readme-middleware
+   * @api public
+   */
+
+  app.task('readme-middleware', { silent: true }, function(cb) {
     if (app.option('sections')) {
       app.onLoad(/\.md$/, require('./lib/sections')(app));
     }
@@ -98,13 +128,6 @@ function generator(app, base) {
     });
 
     app.onLoad(/(verb|readme)\.md$/, lint.layout(app));
-    app.on('readme-generator:end', function() {
-      var warnings = app.get('cache.readmeWarnings');
-      warnings.forEach(function(obj) {
-        console.log(obj.filename + ' | ' + obj.message);
-      });
-    });
-
     cb();
   });
 
@@ -112,13 +135,13 @@ function generator(app, base) {
    * Loads data to used for rendering templates. Called by the [readme]() task.
    *
    * ```sh
-   * $ verb readme:data
+   * $ verb readme:readme-data
    * ```
-   * @name data
+   * @name readme-data
    * @api public
    */
 
-  app.task('data', { silent: true }, function(cb) {
+  app.task('readme-data', { silent: true }, function(cb) {
     debug('loading data');
 
     // temporary data
@@ -169,108 +192,16 @@ function generator(app, base) {
   });
 
   /**
-   * Add a `.verb.md` template to the current working directory.
-   *
-   * ```sh
-   * $ verb readme:new
-   * ```
-   * @name new
-   * @api public
-   */
-
-  app.task('new', function() {
-    var dest = path.resolve(app.option('dest') || app.cwd);
-    app.file('.verb.md', readTemplate(app, 'verbmd/basic.md'));
-    return app.toStream('files')
-      .pipe(app.conflicts(dest))
-      .pipe(app.dest(function(file) {
-        file.base = dest;
-        file.path = path.resolve(file.base, '.verb.md');
-        return dest;
-      }));
-  });
-
-  /**
-   * Load the `.verb.md` in the user's current working directory. If no `.verb.md`
-   * file exists, the [prompt-verbmd)() task is called to ask the user if they want to
-   * add the file. Disable the prompt by passing `--verbmd=false` on the command line,
-   * or `app.disable('verbmd')` via API.
-   *
-   * ```sh
-   * $ verb readme:verbmd
-   * ```
-   * @name verbmd
-   * @api public
-   */
-
-  app.task('verbmd', { silent: true }, function(cb) {
-    debug('loading .verb.md');
-
-    if (app.views.files['README'] || app.views.files['.verb'] || app.options.verbmd === false) {
-      cb();
-      return;
-    }
-
-    // try to load ".verb.md" or custom file from user cwd
-    var readme = cwd(app.option('readme') || '.verb.md');
-    if (utils.exists(readme)) {
-      app.file('README.md', readTemplate(app, readme, app.cwd));
-      cb();
-      return;
-    }
-    app.build('ask', cb);
-  });
-
-  /**
-   * Prompts the user to add a new `.verb.md` template to the current working directory.
-   * Useful in sub-generators.
-   *
-   * ```sh
-   * $ verb readme:prompt-verbmd
-   * ```
-   * @name prompt-verbmd
-   * @api public
-   */
-
-  app.task('prompt-verbmd', function(cb) {
-    // if no .verb.md exists, offer to add one
-    app.confirm('verbmd', 'Can\'t find a .verb.md, want to add one?');
-    app.ask('verbmd', { save: false }, function(err, answers) {
-      if (err) return cb(err);
-      if (answers.verbmd) {
-        app.build('new', cb);
-      } else {
-        cb();
-      }
-    });
-  });
-
-  /**
-   * User-friendly alias for the [prompt-verbmd]() task. _(This task is aliased with both a
-   * terse and long-form name so that in the case this generator is inherited by another
-   * and the generator already has an `ask` task, the `prompt-verbmd` task will still be
-   * available to use via API.)_
-   *
-   * ```sh
-   * $ verb readme:ask
-   * ```
-   * @name ask
-   * @api public
-   */
-
-  app.task('ask', ['prompt-verbmd']);
-
-  /**
    * Load layouts, includes and badges commonly used for generating a README.md.
    *
    * ```sh
-   * $ verb readme:templates
+   * $ verb readme:readme-templates
    * ```
-   * @name templates
+   * @name readme-templates
    * @api public
    */
 
-  app.task('templates', { silent: true }, function(cb) {
+  app.task('readme-templates', { silent: true }, function(cb) {
     debug('loading templates');
 
     app.option('renameKey', function(key, file) {
@@ -317,13 +248,13 @@ function generator(app, base) {
    * to render templats.
    *
    * ```sh
-   * $ verb readme:setup
+   * $ verb readme:readme-setup
    * ```
-   * @name setup
+   * @name readme-setup
    * @api public
    */
 
-  app.task('setup', {silent: true}, ['middleware', 'data', 'templates']);
+  app.task('readme-setup', {silent: true}, ['readme-middleware', 'readme-data', 'readme-templates']);
 
   /**
    * Run after other tasks to get any missing reflinks found in rendered markdown
@@ -331,13 +262,13 @@ function generator(app, base) {
    * uses this array to generate reflinks so that missing reflinks will still resolve.
    *
    * ```sh
-   * $ verb readme:reflinks
+   * $ verb readme:readme-reflinks
    * ```
-   * @name reflinks
+   * @name readme-reflinks
    * @api public
    */
 
-  app.task('reflinks', function(cb) {
+  app.task('readme-reflinks', {silent: true}, function(cb) {
     var existing = app.pkg.get('verb.reflinks') || [];
     var reflinks = app.get('cache.reflinks') || [];
     var diff = utils.diff(reflinks, existing);
@@ -355,17 +286,15 @@ function generator(app, base) {
    * This is a [verb][docs]{tasks.md#silent} task.
    *
    * ```sh
-   * $ verb readme
+   * $ verb readme:readme-build
    * ```
-   * @name readme
+   * @name readme-build
    * @api public
    */
 
-  app.task('build-readme', {silent: true}, ['setup', 'verbmd'], function(cb) {
+  app.task('readme-build', {silent: true}, ['readme-setup', 'verbmd'], function(cb) {
     debug('starting readme task');
     var readme = path.resolve(app.cwd, app.option('readme') || '.verb.md');
-    var dest = path.resolve(app.option('dest') || app.cwd);
-
     app.engine('md', require('engine-base'), {delims: ['{%', '%}']});
     app.data(app.base.cache.data);
     app.helpers(app.base._.helpers.async);
@@ -375,32 +304,96 @@ function generator(app, base) {
       .pipe(app.renderFile('hbs', app.cache.data)).on('error', cb)
       .pipe(app.renderFile('md', app.cache.data)).on('error', cb)
       .pipe(utils.handle(app, 'prePipeline')).on('error', cb)
-      .pipe(app.pipeline(app.options.pipeline)).on('error', cb)
       .pipe(utils.reflinks())
+      .pipe(app.pipeline(app.options.pipeline)).on('error', cb)
       .pipe(app.dest(function(file) {
         app.union('cache.reflinks', file._reflinks);
         file.basename = 'README.md';
-        return dest;
+        return app.options.dest || app.cwd;
       }))
       .on('error', cb)
       .on('end', cb);
   });
 
-  app.task('readme', ['build-readme', 'reflinks']);
-
   /**
-   * Alias for the [readme]() task, generates a README.md to the user's working directory.
+   * Load the `.verb.md` in the user's current working directory. If no `.verb.md`
+   * file exists, the [prompt-verbmd)() task is called to ask the user if they want to
+   * add the file. Disable the prompt by passing `--verbmd=false` on the command line,
+   * or `app.disable('verbmd')` via API.
    *
    * ```sh
-   * $ verb readme
+   * $ verb readme:verbmd
    * ```
-   * @name default
+   * @name verbmd
    * @api public
    */
 
-  app.task('default', ['readme'], function(cb) {
-    this.on('finished', app.emit.bind(app, 'readme-generator:end'));
-    cb();
+  app.task('verbmd', { silent: true }, function(cb) {
+    debug('loading .verb.md');
+    if (app.views.files['README'] || app.views.files['.verb'] || app.options.verbmd === false) {
+      cb();
+      return;
+    }
+
+    // try to load ".verb.md" or custom file from user cwd
+    var readme = cwd(app.option('readme') || '.verb.md');
+    if (utils.exists(readme)) {
+      app.file('README.md', readTemplate(app, readme, app.cwd));
+      cb();
+      return;
+    }
+    app.build('verbmd-prompt', cb);
+  });
+
+  /**
+   * Generate a new `.verb.md` template to the current working directory.
+   *
+   * ```sh
+   * $ verb readme:new
+   * # also aliased as
+   * $ verb readme:verbmd-new
+   * ```
+   * @name verbmd-new
+   * @api public
+   */
+
+  app.task('new', ['verbmd-new']);
+  app.task('verbmd-new', function() {
+    var dest = path.resolve(app.option('dest') || app.cwd);
+    app.file('.verb.md', readTemplate(app, 'verbmd/basic.md'));
+    return app.toStream('files')
+      .pipe(app.conflicts(dest))
+      .pipe(app.dest(function(file) {
+        file.base = dest;
+        file.path = path.resolve(file.base, '.verb.md');
+        return dest;
+      }));
+  });
+
+  /**
+   * Prompts the user to add a new `.verb.md` template to the current working directory.
+   * Useful in sub-generators.
+   *
+   * ```sh
+   * $ verb readme:verbmd-prompt
+   * # alias aliased as
+   * $ verb readme:ask
+   * ```
+   * @name verbmd-prompt
+   * @api public
+   */
+
+  app.task('verbmd-prompt', function(cb) {
+    // if no .verb.md exists, offer to add one
+    app.confirm('verbmd', 'Can\'t find a .verb.md, want to add one?');
+    app.ask('verbmd', { save: false }, function(err, answers) {
+      if (err) return cb(err);
+      if (answers.verbmd) {
+        app.build('new', cb);
+      } else {
+        cb();
+      }
+    });
   });
 
   return generator;
