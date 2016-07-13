@@ -83,8 +83,12 @@
     "verbplugin"
   ],
   "verb": {
-    "toc": false,
-    "layout": "default-dev",
+    "toc": {
+      "render": true,
+      "method": "preWrite",
+      "maxdepth": 3
+    },
+    "layout": "common-minimal",
     "tasks": [
       "readme"
     ],
@@ -94,6 +98,9 @@
     "related": {
       "highlight": "generate",
       "list": [
+        "assemble",
+        "generate",
+        "update",
         "verb",
         "verb-collections",
         "verb-repo-data",
