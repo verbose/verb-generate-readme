@@ -22,12 +22,6 @@ layout: nil
 {%= maybeInclude("coverage") %}
 {%= include("tests") %}
 
-{% if(exists("changelog.md")) { %}
-### History
-Changes are made in [CHANGELOG.md](changelog.md).
-{%= include("changelog.md") %}
-{% } %}
-
 ### Author
 {%= includeEither("authors", "author") %}
 
