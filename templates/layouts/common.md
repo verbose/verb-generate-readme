@@ -4,7 +4,7 @@ layout: nil
 
 {%= include("header") %}
 
-## TOC
+## Table of Contents
 <!-- toc -->
 
 {% body %}
@@ -12,6 +12,8 @@ layout: nil
 ## About
 ### Related projects
 {%= section("related", related(verb.related.list)) %}
+
+{%= section("community") %}
 
 ### Contributing
 {%= include("contributing") %}
