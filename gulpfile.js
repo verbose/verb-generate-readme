@@ -7,7 +7,7 @@ var unused = require('gulp-unused');
 var eslint = require('gulp-eslint');
 
 gulp.task('coverage', function() {
-  return gulp.src(['generator.js', 'lib/**/*.js'])
+  return gulp.src(['index.js', 'lib/**/*.js'])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
@@ -26,7 +26,7 @@ gulp.task('lint', function() {
 
 gulp.task('unused', function() {
   var keys = Object.keys(require('./lib/utils.js'));
-  return gulp.src(['generator.js', 'lib/**/*.js'])
+  return gulp.src(['index.js', 'lib/**/*.js'])
     .pipe(unused({keys: keys}))
 });
 
