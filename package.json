@@ -31,18 +31,17 @@
     "base-pkg": "^0.2.4",
     "base-questions": "^0.6.6",
     "camel-case": "^3.0.0",
-    "common-middleware": "^0.2.10",
     "debug": "^2.2.0",
     "delete": "^0.3.2",
     "engine-base": "^0.1.2",
     "engine-handlebars": "^0.8.0",
     "fs-exists-sync": "^0.1.0",
     "get-value": "^2.0.6",
-    "gulp-reflinks": "^0.1.4",
+    "gulp-reflinks": "^0.2.0",
     "has-value": "^0.3.1",
     "is-valid-app": "^0.2.0",
     "lazy-cache": "^2.0.1",
-    "log-utils": "^0.1.4",
+    "log-utils": "^0.2.1",
     "markdown-toc": "^0.12.14",
     "match-file": "^0.2.0",
     "resolve": "^1.1.7",
@@ -52,8 +51,8 @@
     "verb-collections": "^0.1.4",
     "verb-defaults": "^0.1.0",
     "verb-repo-data": "^0.1.11",
-    "verb-repo-helpers": "^0.2.2",
-    "verb-toc": "^0.2.5"
+    "verb-repo-helpers": "^0.2.3",
+    "verb-toc": "^0.2.7"
   },
   "devDependencies": {
     "assemble-core": "^0.25.0",
@@ -103,6 +102,7 @@
     "reflinks": [
       "gulp",
       "verb",
+      "verb-generate-readme",
       "verb-readme-generator"
     ],
     "sections": false,

@@ -2,12 +2,8 @@
 
 var fs = require('fs');
 var path = require('path');
-var reflinks = require('gulp-reflinks');
-var toc = require('markdown-toc');
 var templates = path.resolve.bind(path, __dirname, 'templates');
 var debug = require('debug')('base:verb:verb-readme-generator');
-var common = require('common-middleware');
-var handle = require('assemble-handle');
 var depdocs = require('./lib/depdocs');
 var helpers = require('./lib/helpers');
 var utils = require('./lib/utils');
@@ -20,6 +16,11 @@ var lint = require('./lib/lint');
 function generator(app, base) {
   if (!utils.isValid(app, 'verb-readme-generator')) return;
   setAppContext(app);
+
+  /**
+   * Engine
+   */
+
   app.engine('hbs', require('engine-handlebars'));
   app.handler('prePipeline');
 
@@ -37,7 +38,6 @@ function generator(app, base) {
 
   helpers(app);
   depdocs(app);
-  app.use(common());
   app.helpers(require('template-helpers')());
 
   /**
@@ -66,7 +66,7 @@ function generator(app, base) {
       inst.compile(view, opts);
       token.content = view.fn(inst.cache.data);
     }
-    toc.linkify(token, name, slug, tocOpts);
+    utils.toc.linkify(token, name, slug, tocOpts);
     return token;
   });
 
@@ -326,6 +326,31 @@ function generator(app, base) {
   app.task('setup', {silent: true}, ['middleware', 'data', 'templates']);
 
   /**
+   * Run after other tasks to get any missing reflinks found in rendered markdown
+   * documents, and add them to the `verb.reflinks` array in package.json. Verb
+   * uses this array to generate reflinks so that missing reflinks will still resolve.
+   *
+   * ```sh
+   * $ verb readme:reflinks
+   * ```
+   * @name reflinks
+   * @api public
+   */
+
+  app.task('reflinks', function(cb) {
+    var existing = app.pkg.get('verb.reflinks') || [];
+    var reflinks = app.get('cache.reflinks') || [];
+    var diff = utils.diff(existing, reflinks);
+    console.log(diff)
+    if (diff.length > 1) {
+      app.pkg.union('verb.reflinks', diff);
+      app.pkg.save();
+      app.pkg.logInfo('updated package.json with:', {reflinks: diff});
+    }
+    cb();
+  });
+
+  /**
    * Generate a README.md from a `.verb.md` template. Runs the [middleware](), [templates](),
    * and [data]() tasks. This is a [verb](){/docs/tasks/#silent} task.
    *
@@ -349,15 +374,11 @@ function generator(app, base) {
     app.toStream('files', utils.filter(readme)).on('error', cb)
       .pipe(app.renderFile('hbs', app.cache.data)).on('error', cb)
       .pipe(app.renderFile('md', app.cache.data)).on('error', cb)
-      .pipe(handle(app, 'prePipeline')).on('error', cb)
+      .pipe(utils.handle(app, 'prePipeline')).on('error', cb)
       .pipe(app.pipeline(app.options.pipeline)).on('error', cb)
-      .pipe(reflinks())
+      .pipe(utils.reflinks())
       .pipe(app.dest(function(file) {
-        if (file._reflinks) {
-          app.pkg.union('verb.reflinks', file._reflinks);
-          app.pkg.logInfo('updated package.json with:', {reflinks: file._reflinks});
-          app.pkg.save();
-        }
+        app.union('cache.reflinks', file._reflinks);
         file.basename = 'README.md';
         return dest;
       }))
@@ -375,7 +396,7 @@ function generator(app, base) {
    * @api public
    */
 
-  app.task('default', ['readme'], function(cb) {
+  app.task('default', ['readme', 'reflinks'], function(cb) {
     this.on('finished', app.emit.bind(app, 'readme-generator:end'));
     cb();
   });
