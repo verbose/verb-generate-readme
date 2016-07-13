@@ -4,14 +4,16 @@ layout: nil
 
 {%= include("header") %}
 
-## TOC
+## Table of Contents
 <!-- toc -->
 
 {% body %}
 
 ## About
 ### Related projects
-{%= include("related-list") %}
+{%= section("related", related(verb.related.list)) %}
+
+{%= section("community") %}
 
 ### Contributing
 {%= include("contributing") %}
@@ -19,6 +21,12 @@ layout: nil
 ### Running tests
 {%= maybeInclude("coverage") %}
 {%= include("tests") %}
+
+{% if(exists("changelog.md")) { %}
+### History
+Changes are made in [CHANGELOG.md](changelog.md).
+{%= include("changelog.md") %}
+{% } %}
 
 ### Author
 {%= includeEither("authors", "author") %}
