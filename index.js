@@ -340,8 +340,8 @@ function generator(app, base) {
   app.task('reflinks', function(cb) {
     var existing = app.pkg.get('verb.reflinks') || [];
     var reflinks = app.get('cache.reflinks') || [];
-    var diff = utils.diff(existing, reflinks);
-    console.log(diff)
+    var diff = utils.diff(reflinks, existing);
+
     if (diff.length > 1) {
       app.pkg.union('verb.reflinks', diff);
       app.pkg.save();
@@ -351,8 +351,8 @@ function generator(app, base) {
   });
 
   /**
-   * Generate a README.md from a `.verb.md` template. Runs the [middleware](), [templates](),
-   * and [data]() tasks. This is a [verb](){/docs/tasks/#silent} task.
+   * Generate a README.md from a `.verb.md` template. Runs the [setup](), and [verbmd]() tasks.
+   * This is a [verb][docs]{tasks.md#silent} task.
    *
    * ```sh
    * $ verb readme
@@ -361,7 +361,7 @@ function generator(app, base) {
    * @api public
    */
 
-  app.task('readme', {silent: true}, ['setup', 'verbmd'], function(cb) {
+  app.task('build-readme', {silent: true}, ['setup', 'verbmd'], function(cb) {
     debug('starting readme task');
     var readme = path.resolve(app.cwd, app.option('readme') || '.verb.md');
     var dest = path.resolve(app.option('dest') || app.cwd);
@@ -386,6 +386,8 @@ function generator(app, base) {
       .on('end', cb);
   });
 
+  app.task('readme', ['build-readme', 'reflinks']);
+
   /**
    * Alias for the [readme]() task, generates a README.md to the user's working directory.
    *
@@ -396,7 +398,7 @@ function generator(app, base) {
    * @api public
    */
 
-  app.task('default', ['readme', 'reflinks'], function(cb) {
+  app.task('default', ['readme'], function(cb) {
     this.on('finished', app.emit.bind(app, 'readme-generator:end'));
     cb();
   });
