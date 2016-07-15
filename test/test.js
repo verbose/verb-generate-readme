@@ -5,23 +5,12 @@ var fs = require('fs');
 var path = require('path');
 var assert = require('assert');
 var del = require('delete');
-// var verb = require('verb');
+var gm = require('global-modules');
 var isValid = require('is-valid-app');
-var Assemble = require('assemble-core');
-var generators = require('base-generators');
-var pipeline = require('base-pipeline');
-var loader = require('assemble-loader');
+var generate = require('generate');
 var generator = require('..');
 var orig = process.cwd();
 var app;
-
-function Verb(options) {
-  Assemble.call(this, options);
-  this.use(generators());
-  this.use(pipeline());
-  this.use(loader());
-}
-Assemble.extend(Verb);
 
 var fixtures = path.resolve.bind(path, __dirname, 'fixtures');
 var actual = path.resolve.bind(path, __dirname, 'actual');
@@ -33,27 +22,42 @@ function exists(name, cb) {
 
     fs.stat(filepath, function(err, stat) {
       if (err) return cb(err);
-      del(actual(), {force: true}, cb);
+      assert(stat);
+      assert(stat.isFile());
+      cb();
     });
   }
+}
+
+function symlink(dir, cb) {
+  var src = path.resolve(dir);
+  var name = path.basename(src);
+  var dest = path.resolve(gm, name);
+  fs.stat(dest, function(err, stat) {
+    if (err) {
+      fs.symlink(src, dest, cb);
+    } else {
+      cb();
+    }
+  });
 }
 
 describe('verb-readme-generator', function() {
   this.slow(300);
 
-  before(function() {
-    process.chdir(fixtures());
-  });
-
   beforeEach(function() {
-    app = new Verb({cli: true, silent: true});
+    app = generate({cli: true, silent: true});
+    app.option('srcBase', fixtures());
     app.option('dest', actual());
-    app.option('cwd', fixtures());
+    app.cwd = actual();
+
     app.data('author.name', 'Jon Schlinkert');
+    app.data({runner: require('../package')});
+    app.data(require('../package'));
   });
 
-  after(function() {
-    process.chdir(orig);
+  after(function(cb) {
+    del(actual(), cb);
   });
 
   describe('plugin', function() {
@@ -106,6 +110,24 @@ describe('verb-readme-generator', function() {
     });
   });
 
+  if (!process.env.CI && !process.env.TRAVIS) {
+    describe('generator (CLI)', function() {
+      before(function(cb) {
+        symlink(__dirname, cb);
+      });
+
+      it('should run the default task using the `verb-generate-readme` name', function(cb) {
+        app.use(generator);
+        app.generate('verb-generate-readme', exists('README.md', cb));
+      });
+
+      it('should run the default task using the `readme` generator alias', function(cb) {
+        app.use(generator);
+        app.generate('readme', exists('README.md', cb));
+      });
+    });
+  }
+
   describe('generator', function() {
     it('should work as a generator', function(cb) {
       app.cwd = fixtures();
@@ -119,7 +141,6 @@ describe('verb-readme-generator', function() {
     });
 
     it('should run the `new` task', function(cb) {
-      app.option('dest', actual());
       app.register('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });
@@ -142,7 +163,6 @@ describe('verb-readme-generator', function() {
     });
 
     it('should run the `new` task', function(cb) {
-      app.option('dest', actual());
       app.register('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });
@@ -180,7 +200,6 @@ describe('verb-readme-generator', function() {
   describe('variables', function() {
     it('should set `name`', function(cb) {
       app.option('readme', fixtures('variable-name.md'));
-      app.option('dest', actual());
       app.data({name: 'verb-foo-generator'});
 
       app.register('readme', assertVariable('verb-foo-generator'));
@@ -189,7 +208,6 @@ describe('verb-readme-generator', function() {
 
     it('should set `alias`', function(cb) {
       app.option('readme', fixtures('variable-alias.md'));
-      app.option('dest', actual());
       app.data({name: 'verb-foo-generator'});
 
       app.register('readme', assertVariable('foo'));
@@ -198,7 +216,6 @@ describe('verb-readme-generator', function() {
 
     it('should set `varname`', function(cb) {
       app.option('readme', fixtures('variable-varname.md'));
-      app.option('dest', actual());
       app.data({name: 'verb-foo-generator'});
 
       app.register('readme', assertVariable('verbFooGenerator'));

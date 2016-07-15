@@ -294,15 +294,16 @@ function generator(app, base) {
 
   app.task('readme-build', {silent: true}, ['readme-setup', 'verbmd'], function(cb) {
     debug('starting readme task');
-    var readme = path.resolve(app.cwd, app.option('readme') || '.verb.md');
-    app.engine('md', require('engine-base'), {delims: ['{%', '%}']});
+    var srcBase = app.options.srcBase || app.cwd;
+    var readme = path.resolve(srcBase, app.options.readme || '.verb.md');
+
     app.data(app.base.cache.data);
     app.helpers(app.base._.helpers.async);
     app.helpers(app.base._.helpers.sync);
 
     app.toStream('files', utils.filter(readme)).on('error', cb)
       .pipe(app.renderFile('hbs', app.cache.data)).on('error', cb)
-      .pipe(app.renderFile('md', app.cache.data)).on('error', cb)
+      .pipe(app.renderFile('*', app.cache.data)).on('error', cb)
       .pipe(utils.handle(app, 'prePipeline')).on('error', cb)
       .pipe(utils.reflinks(app.options))
       .pipe(app.pipeline(app.options.pipeline)).on('error', cb)
@@ -336,9 +337,10 @@ function generator(app, base) {
     }
 
     // try to load ".verb.md" or custom file from user cwd
-    var readme = cwd(app.option('readme') || '.verb.md');
+    var srcBase = app.options.srcBase || app.cwd;
+    var readme = path.resolve(srcBase, app.options.readme || '.verb.md');
     if (utils.exists(readme)) {
-      app.file('README.md', readTemplate(app, readme, app.cwd));
+      app.file('README.md', readTemplate(app, readme, srcBase));
       cb();
       return;
     }
