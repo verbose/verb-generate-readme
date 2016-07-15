@@ -304,12 +304,12 @@ function generator(app, base) {
       .pipe(app.renderFile('hbs', app.cache.data)).on('error', cb)
       .pipe(app.renderFile('md', app.cache.data)).on('error', cb)
       .pipe(utils.handle(app, 'prePipeline')).on('error', cb)
-      .pipe(utils.reflinks())
+      .pipe(utils.reflinks(app.options))
       .pipe(app.pipeline(app.options.pipeline)).on('error', cb)
       .pipe(app.dest(function(file) {
         app.union('cache.reflinks', file._reflinks);
         file.basename = 'README.md';
-        return app.options.dest || app.cwd;
+        return app.cwd;
       }))
       .on('error', cb)
       .on('end', cb);
