@@ -4,6 +4,8 @@ layout: nil
 
 {%= include("header") %}
 
+{%= section("demo") %}
+
 ## Table of Contents
 <!-- toc -->
 
