@@ -54,7 +54,7 @@ function generator(app, base) {
     return name.slice(name.lastIndexOf('-') + 1);
   });
 
-  app.option('linkify', function(token, name, slug, tocOpts) {
+  app.option('toc.linkify', function(token, name, slug, tocOpts) {
     if (/[{<]%=?/.test(name)) {
       var inst = new app.constructor();
       var opts = app.options;
