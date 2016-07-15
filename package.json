@@ -30,7 +30,7 @@
     "async-each": "^1.0.0",
     "base-fs-conflicts": "^0.1.7",
     "base-pkg": "^0.2.4",
-    "base-questions": "^0.6.6",
+    "base-questions": "^0.7.1",
     "camel-case": "^3.0.0",
     "debug": "^2.2.0",
     "delete": "^0.3.2",
@@ -45,15 +45,16 @@
     "log-utils": "^0.2.1",
     "markdown-toc": "^0.12.14",
     "match-file": "^0.2.0",
+    "mixin-deep": "^1.1.3",
     "resolve": "^1.1.7",
     "sections": "^0.1.8",
-    "template-helpers": "^0.6.5",
+    "template-helpers": "^0.6.6",
     "update-sections": "^0.1.0",
     "verb-collections": "^0.1.4",
     "verb-defaults": "^0.1.0",
     "verb-repo-data": "^0.1.11",
     "verb-repo-helpers": "^0.2.3",
-    "verb-toc": "^0.2.7"
+    "verb-toc": "^0.2.8"
   },
   "devDependencies": {
     "assemble-core": "^0.25.0",
@@ -92,6 +93,14 @@
     "tasks": [
       "readme"
     ],
+    "middleware": {
+      "prePipeline": [
+        {
+          "name": "verb-reflinks",
+          "match": "*.md"
+        }
+      ]
+    },
     "plugins": [
       "gulp-format-md"
     ],
@@ -109,9 +118,7 @@
     },
     "reflinks": [
       "gulp",
-      "verb",
-      "verb-generate-readme",
-      "verb-readme-generator"
+      "verb-generate-readme"
     ],
     "sections": false,
     "lint": {
