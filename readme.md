@@ -172,7 +172,7 @@ Generate a README.md from a `.verb.md` template. Runs the [setup](#setup), and [
 $ verb readme:readme-build
 ```
 
-### [verbmd](index.js#L331)
+### [verbmd](index.js#L332)
 
 Load the `.verb.md` in the user's current working directory. If no `.verb.md` file exists, the [prompt-verbmd)() task is called to ask the user if they want to add the file. Disable the prompt by passing `--verbmd=false` on the command line, or `app.disable('verbmd')` via API.
 
@@ -182,7 +182,7 @@ Load the `.verb.md` in the user's current working directory. If no `.verb.md` fi
 $ verb readme:verbmd
 ```
 
-### [verbmd-new](index.js#L360)
+### [verbmd-new](index.js#L362)
 
 Generate a new `.verb.md` template to the current working directory.
 
@@ -194,7 +194,7 @@ $ verb readme:new
 $ verb readme:verbmd-new
 ```
 
-### [verbmd-prompt](index.js#L386)
+### [verbmd-prompt](index.js#L388)
 
 Prompts the user to add a new `.verb.md` template to the current working directory. Useful in sub-generators.
 
