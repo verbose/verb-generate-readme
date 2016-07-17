@@ -8,25 +8,19 @@ You might also be interested in [generate](https://github.com/generate/generate)
 
 - [Heads up!](#heads-up)
 - [What is verb?](#what-is-verb)
-- [CLI](#cli)
-- [Tasks](#tasks)
-  * [readme](#readme)
-  * [default](#default)
-  * [readme-middleware](#readme-middleware)
-  * [readme-data](#readme-data)
-  * [readme-templates](#readme-templates)
-  * [readme-setup](#readme-setup)
-  * [readme-reflinks](#readme-reflinks)
-  * [readme-build](#readme-build)
-  * [verbmd](#verbmd)
-  * [verbmd-new](#verbmd-new)
-  * [verbmd-prompt](#verbmd-prompt)
-- [Options](#options)
-  * [run](#run)
-  * [silent](#silent)
-  * [readme](#readme)
-  * [times](#times)
-  * [toc](#toc)
+- [Getting started](#getting-started)
+- [Command line](#command-line)
+  * [Tasks](#tasks)
+    + [readme](#readme)
+    + [default](#default)
+  * [Options](#options)
+    + [run](#run)
+    + [silent](#silent)
+    + [readme](#readme)
+    + [times](#times)
+    + [toc](#toc)
+    + [no-reflinks-cache](#no-reflinks-cache)
+    + [layout](#layout)
 - [About](#about)
   * [Related projects](#related-projects)
   * [Contributing](#contributing)
@@ -66,11 +60,11 @@ If `verb-generate-readme` is installed (locally or globally), and a `verbfile.js
 
 Visit the [verb](https://github.com/verbose/verb) project to learn more.
 
-## CLI
+## Getting started
 
 **Installing the CLI**
 
-To run the `readme` generator from the command line, you'll need to install [verb](https://github.com/verbose/verb) globally first. You can that now with the following command:
+To run the `readme` generator from the command line, you'll need to first install [verb](https://github.com/verbose/verb) globally first. You can that now with the following command:
 
 ```sh
 $ npm install --global verb
@@ -88,11 +82,13 @@ Run the `readme` generator from the command line:
 $ verb readme
 ```
 
-## Tasks
+## Command line
 
-The following tasks are defined on the generator.
+### Tasks
 
-### [readme](index.js#L97)
+The following tasks are defined on `verb-generate-readme`.
+
+#### [readme](generator.js#L97)
 
 Generate `README.md` and fix missing [reflinks](#reflinks).
 
@@ -102,7 +98,7 @@ Generate `README.md` and fix missing [reflinks](#reflinks).
 $ verb readme
 ```
 
-### [default](index.js#L109)
+#### [default](generator.js#L109)
 
 Alias for the [readme](#readme) task, generates a README.md to the user's working directory.
 
@@ -112,107 +108,17 @@ Alias for the [readme](#readme) task, generates a README.md to the user's workin
 $ verb readme
 ```
 
-### [readme-middleware](index.js#L121)
+### Options
 
-Initialize middleware used for rendering the [readme](#readme).
+Configuration options can be:
 
-**Example**
-
-```sh
-$ verb readme:readme-middleware
-```
-
-### [readme-data](index.js#L144)
-
-Loads data to used for rendering templates. Called by the [readme](#readme) task.
-
-**Example**
-
-```sh
-$ verb readme:readme-data
-```
-
-### [readme-templates](index.js#L204)
-
-Load layouts, includes and badges commonly used for generating a README.md.
-
-**Example**
-
-```sh
-$ verb readme:readme-templates
-```
-
-### [readme-setup](index.js#L257)
-
-Load `options`, `plugins`, `middleware` and `data` before calling a task to render templats.
-
-**Example**
-
-```sh
-$ verb readme:readme-setup
-```
-
-### [readme-reflinks](index.js#L271)
-
-Run after other tasks to get any missing reflinks found in rendered markdown documents, and add them to the `verb.reflinks` array in package.json. Verb uses this array to generate reflinks so that missing reflinks will still resolve.
-
-**Example**
-
-```sh
-$ verb readme:readme-reflinks
-```
-
-### [readme-build](index.js#L295)
-
-Generate a README.md from a `.verb.md` template. Runs the [setup](#setup), and [verbmd](#verbmd) tasks. This is a [verb](https://github.com/verbose/verb/blob/master/docs/tasks.md#silent) task.
-
-**Example**
-
-```sh
-$ verb readme:readme-build
-```
-
-### [verbmd](index.js#L332)
-
-Load the `.verb.md` in the user's current working directory. If no `.verb.md` file exists, the [prompt-verbmd)() task is called to ask the user if they want to add the file. Disable the prompt by passing `--verbmd=false` on the command line, or `app.disable('verbmd')` via API.
-
-**Example**
-
-```sh
-$ verb readme:verbmd
-```
-
-### [verbmd-new](index.js#L362)
-
-Generate a new `.verb.md` template to the current working directory.
-
-**Example**
-
-```sh
-$ verb readme:new
-# also aliased as
-$ verb readme:verbmd-new
-```
-
-### [verbmd-prompt](index.js#L388)
-
-Prompts the user to add a new `.verb.md` template to the current working directory. Useful in sub-generators.
-
-**Example**
-
-```sh
-$ verb readme:verbmd-prompt
-# alias aliased as
-$ verb readme:ask
-```
-
-## Options
-
-Configuration options can be passed on the command line, defined on the `verb` object in package.json, or set using the API.
+* passed on the command line
+* defined on the `verb` object in package.json, or
+* set directly [using the API](https://github.com/verbose/verb/blob/master/docs/api/options.md)
 
 Most of the following examples show how to set configuration values on the `verb` object _via the command line_, but you can also set these manually.
 
-### run
+#### run
 
 To automatically run the `readme` generator with the `verb` command (without specifying `readme` on the command line), add the following to package.json:
 
@@ -226,7 +132,7 @@ To automatically run the `readme` generator with the `verb` command (without spe
 }
 ```
 
-### silent
+#### silent
 
 Mute progress for tasks and generators from being displayed in the terminal.
 
@@ -267,7 +173,7 @@ With `--silent`
 
 ![running tasks and generators with the silent flag](https://cloud.githubusercontent.com/assets/383994/14979276/573b5f8a-10ef-11e6-8ce4-6c5bc4563f6b.png)
 
-### readme
+#### readme
 
 Customize the location of your readme template.
 
@@ -289,7 +195,7 @@ In your project's package.json:
 }
 ```
 
-### times
+#### times
 
 Display all timings that are typically muted in the terminal.
 
@@ -321,7 +227,7 @@ app.enable('times');
 app.option('times', true);
 ```
 
-### toc
+#### toc
 
 Disable or enable the Table of Contents in the built-in layouts:
 
@@ -356,6 +262,14 @@ Results in:
 }
 ```
 
+#### no-reflinks-cache
+
+Disable reflinks caching.
+
+```sh
+$ verb --no-reflinks-cache
+```
+
 #### layout
 
 Set the layout to use for a project.
@@ -383,6 +297,7 @@ Layouts can be defined on a template-by-template basic, and even for includes. I
 * [assemble](https://www.npmjs.com/package/assemble): Get the rocks out of your socks! Assemble makes you fast at creating web projects… [more](https://github.com/assemble/assemble) | [homepage](https://github.com/assemble/assemble "Get the rocks out of your socks! Assemble makes you fast at creating web projects. Assemble is used by thousands of projects for rapid prototyping, creating themes, scaffolds, boilerplates, e-books, UI components, API documentation, blogs, building websit")
 * [generate](https://www.npmjs.com/package/generate): Command line tool and developer framework for scaffolding out new GitHub projects. Generate offers the… [more](https://github.com/generate/generate) | [homepage](https://github.com/generate/generate "Command line tool and developer framework for scaffolding out new GitHub projects. Generate offers the robustness and configurability of Yeoman, the expressiveness and simplicity of Slush, and more powerful flow control and composability than either.")
 * [update](https://www.npmjs.com/package/update): Be scalable! Update is a new, open source developer framework and CLI for automating updates… [more](https://github.com/update/update) | [homepage](https://github.com/update/update "Be scalable! Update is a new, open source developer framework and CLI for automating updates of any kind in code projects.")
+* [verb-repo-data](https://www.npmjs.com/package/verb-repo-data): Verb plugin that adds repository and package.json data to the context for rendering templates. | [homepage](https://github.com/verbose/verb-repo-data "Verb plugin that adds repository and package.json data to the context for rendering templates.")
 * [verb](https://www.npmjs.com/package/verb): Documentation generator for GitHub projects. Verb is extremely powerful, easy to use, and is used… [more](https://github.com/verbose/verb) | [homepage](https://github.com/verbose/verb "Documentation generator for GitHub projects. Verb is extremely powerful, easy to use, and is used on hundreds of projects of all sizes to generate everything from API docs to readmes.")
 
 ### Contributing
@@ -411,4 +326,4 @@ Released under the [MIT license](https://github.com/verbose/verb-generate-readme
 
 ***
 
-_This file was generated by [verb](https://github.com/verbose/verb), v0.9.0, on July 15, 2016._
+_This file was generated by [verb](https://github.com/verbose/verb), v0.9.0, on July 17, 2016._
