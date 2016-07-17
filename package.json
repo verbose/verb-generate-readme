@@ -1,7 +1,7 @@
 {
   "name": "verb-generate-readme",
   "description": "Generate your project's readme with verb. Requires verb v0.9.0 or higher.",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "homepage": "https://github.com/verbose/verb-generate-readme",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "verbose/verb-generate-readme",
@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "files": [
+    "generator.js",
     "index.js",
     "lib",
     "LICENSE",
@@ -85,7 +86,7 @@
     "toc": {
       "render": true,
       "method": "preWrite",
-      "maxdepth": 3
+      "maxdepth": 4
     },
     "layout": "common-minimal",
     "tasks": [
