@@ -1,5 +1,5 @@
 ---
-layout: common
+layout: common-minimal
 ---
 
 ## What is generate?
