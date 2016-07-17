@@ -7,6 +7,8 @@ module.exports = {
 
   fury: '[![NPM version](https://img.shields.io/npm/v/{%= name %}.svg?style=flat)](https://www.npmjs.com/package/{%= name %})',
 
+  gitter: '[![Gitter](https://badges.gitter.im/join_chat.svg)](https://gitter.im/{%= repository %})',
+
   npm: '[![NPM version](https://img.shields.io/npm/v/{%= name %}.svg?style=flat)](https://www.npmjs.com/package/{%= name %})',
 
   downloads: '[![NPM downloads](https://img.shields.io/npm/dm/{%= name %}.svg?style=flat)](https://npmjs.org/package/{%= name %})',
