@@ -14,7 +14,7 @@
 
 **Description**
 
-The `layouts` collection is used for caching layout templates. 
+The `layouts` collection is used for caching layout templates.
 
 **Defining a layout**
 
