@@ -1,4 +1,8 @@
-[Update][repo] is a new, open-source developer framework for automating updates of any kind to code projects. For more information:
+[Update][] is a new, open-source developer framework for automating updates of any kind to code projects. All actual updating is done plugins called "updaters", like this one.  
+
+Updaters can be run from the command line when [Update's CLI][docs]{installing-the-cli.md} is installed globally, or they can be used as building blocks for creating other [updaters][docs]{updaters.md}.
+
+**For more information:**
 
 - Visit the [update project][repo]
 - Visit the [update documentation][docs]
