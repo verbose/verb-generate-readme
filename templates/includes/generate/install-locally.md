@@ -5,5 +5,5 @@
 Then use in your project:
 
 ```js
-var {%= strip(platform.name + '-', name) %} = require('{%= name %}');
+var {%= alias %} = require('{%= name %}');
 ```

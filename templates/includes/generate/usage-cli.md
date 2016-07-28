@@ -6,12 +6,12 @@ Get general help and a menu of available commands:
 $ gen help
 ```
 
-**Running the `{%= strip(platform.name + '-', name) %}` generator**
+**Running the `{%= alias %}` generator**
 
 Once both [generate][] and `{%= name %}` are installed globally, you can run the generator with the following command:
 
 ```sh
-$ gen {%= strip(platform.name + '-', name) %}
+$ gen {%= alias %}
 ```
 
 If completed successfully, you should see both `starting` and `finished` events in the terminal, like the following:

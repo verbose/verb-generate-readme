@@ -1,23 +1,43 @@
 ---
-layout: common
+layout: nil
 ---
 
-## What is update?
-{%= include("update/what-is-update.md") %}
+{%= include("update/logo") %}
+{%= include("update/header") %}
 
-## Quickstart
+![{%= name %} demo](https://raw.githubusercontent.com/{%= repo %}/master/docs/demo.gif)
+
+## Table of Contents
+<!-- toc -->
+
+## What is "Update"?
+{%= include("update/what-is-update") %}
 
 {% body %}
 
+## About
+### Related projects
+{%= section("related", related(verb.related.list)) %}
+
+### Community
+{%= include("update/community") %}
+
+### Contributing
+{%= include("contributing") %}
+
+### Running tests
+{%= maybeInclude("coverage") %}
+{%= include("tests") %}
+
+### Author
+{%= includeEither("authors", "author") %}
+
+### License
+{%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
+{%= license %}
+
 ***
 
-### CLI
-{%= include("update/usage-cli.md") %}
+{%= include("footer") %}
 
-### Tasks
-{%= section("tasks") %}
-
-***
-
-### API
-{%= include("update/usage-api.md") %}
+{%= reflinks(verb.reflinks) %}

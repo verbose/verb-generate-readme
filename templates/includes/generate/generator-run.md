@@ -1,5 +1,5 @@
-Run this generator's `default` [task]({%= platform.docs %}/docs/tasks.md#default-task) with the following command:
+Run this generator's `default` [task]({%= suite.docs %}/tasks.md#default) with the following command:
 
 ```sh
-$ gen {%= replace(name, /generate-/, '') %}
+$ gen {%= alias %}
 ```
