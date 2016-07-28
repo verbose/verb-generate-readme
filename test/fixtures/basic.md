@@ -1,6 +1,5 @@
 ---
-layout: false
-rename: 
+rename:
   basename: '.verb.md'
 ---
 ## Usage

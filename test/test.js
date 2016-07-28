@@ -30,7 +30,6 @@ function exists(name, cb) {
   }
 }
 
-
 describe('verb-readme-generator', function() {
   this.slow(300);
 
@@ -48,6 +47,10 @@ describe('verb-readme-generator', function() {
   });
 
   before(function(cb) {
+    del(actual(), cb);
+  });
+
+  after(function(cb) {
     del(actual(), cb);
   });
 
@@ -128,7 +131,7 @@ describe('verb-readme-generator', function() {
     });
 
     it('should run the `new` task', function(cb) {
-      app.register('readme', generator);
+      app.generator('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });
   });
