@@ -1,6 +1,6 @@
 'use strict';
 
-// require('time-require');
+var fs = require('fs');
 var path = require('path');
 var debug = require('debug')('verb-generate-readme');
 var options = require('./lib/options');
@@ -44,6 +44,8 @@ function generator(app, base) {
    */
 
   helpers(app);
+  setup.options(app);
+  setup.data(app);
 
   /**
    * Alias for the [readme]() task, generates a README.md to the user's working directory.
@@ -55,7 +57,7 @@ function generator(app, base) {
    * @api public
    */
 
-  app.task('default', ['readme']);
+  app.task('default', ['verbmd-prompt', 'readme']);
 
   /**
    * Generate `README.md` and fix missing [reflinks](#reflinks).
@@ -67,7 +69,7 @@ function generator(app, base) {
    * @api public
    */
 
-  app.task('readme', { silent: true }, [
+  app.task('readme', [
     'readme-middleware',
     'readme-templates',
     'readme-data',
@@ -85,7 +87,7 @@ function generator(app, base) {
    * @name readme-render
    */
 
-  app.task('readme-render', function(cb) {
+  app.task('readme-render', {silent: true}, function(cb) {
     debug('starting readme task');
     var srcBase = app.options.srcBase || app.cwd;
     var file = app.options.readme || '.verb.md';
@@ -97,6 +99,7 @@ function generator(app, base) {
       .pipe(utils.reflinks(app.options))
       .pipe(app.pipeline(app.options.pipeline))
       .pipe(app.dest(function(file) {
+        app.base.emit('dest', file);
         file.basename = 'README.md';
         return app.cwd;
       }));
@@ -143,8 +146,6 @@ function generator(app, base) {
    */
 
   app.task('readme-data', { silent: true }, function(cb) {
-    setup.options(app);
-    setup.data(app);
     if (utils.exists(path.join(app.cwd, 'bower.json'))) {
       app.data({bower: true});
     }
@@ -228,7 +229,14 @@ function generator(app, base) {
   app.task('verbmd-new', function() {
     var cwd = app.options.srcBase || path.join(__dirname, 'templates/verbmd');
     return app.src('basic.md', {cwd: cwd})
-      .pipe(app.renderFile({layout: false}))
+      .pipe(app.renderFile({layout: app.pkg.get('verb.layout') || false}))
+      .pipe(utils.through.obj(function(file, enc, next) {
+        var readme = app.get('cache.readme');
+        if (readme) {
+          file.contents = readme;
+        }
+        next(null, file);
+      }))
       .pipe(app.conflicts(app.cwd))
       .pipe(app.dest(app.cwd));
   });
@@ -245,11 +253,16 @@ function generator(app, base) {
    * @name verbmd-prompt
    */
 
-  app.task('verbmd-prompt', function(cb) {
+  app.task('verbmd-prompt', {silent: true}, function(cb) {
+    if (utils.exists('.verb.md')) return cb();
     app.confirm('verbmd', 'Can\'t find a .verb.md, want to add one?');
     app.ask('verbmd', { save: false }, function(err, answers) {
       if (err) return cb(err);
       if (answers.verbmd) {
+        var readme = path.join(app.cwd, 'README.md');
+        if (utils.exists(readme)) {
+          app.set('cache.readme', fs.readFileSync(readme));
+        }
         app.build('new', cb);
       } else {
         cb();
