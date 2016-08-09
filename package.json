@@ -1,7 +1,7 @@
 {
   "name": "verb-generate-readme",
   "description": "Generate your project's readme with verb. Requires verb v0.9.0 or higher.",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "homepage": "https://github.com/verbose/verb-generate-readme",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "verbose/verb-generate-readme",
