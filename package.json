@@ -57,7 +57,7 @@
     "global-modules": "^0.2.2",
     "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",
-    "gulp-format-md": "^0.1.9",
+    "gulp-format-md": "^0.1.10",
     "gulp-istanbul": "^1.0.0",
     "gulp-mocha": "^2.2.0",
     "gulp-unused": "^0.1.2",
