@@ -1,0 +1,4 @@
+---
+layout: common-minimal
+---
+{% body %}

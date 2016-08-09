@@ -2,11 +2,10 @@
 layout: nil
 ---
 
-{%= section("header") %}
-{%= section("demo") %}
+{%= include(name + "/logo", {size: name === suite.name ? 250 : 150}) %}
+{%= include(name + "/header") %}
 
-## Table of Contents
-<!-- toc -->
+![{%= name %} demo](https://raw.githubusercontent.com/{%= repo %}/master/docs/demo.gif)
 
 {% body %}
 
@@ -14,7 +13,8 @@ layout: nil
 ### Related projects
 {%= section("related", related(verb.related.list)) %}
 
-{%= section("community") %}
+### Community
+{%= include("generate/community") %}
 
 ### Contributing
 {%= include("contributing") %}
