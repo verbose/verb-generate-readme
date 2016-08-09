@@ -47,7 +47,7 @@
     "through2": "^2.0.1",
     "update-sections": "^0.1.2",
     "verb-collections": "^0.1.4",
-    "verb-defaults": "^0.2.1",
+    "verb-defaults": "^0.3.0",
     "verb-repo-data": "^0.1.11",
     "verb-repo-helpers": "^0.2.3",
     "verb-toc": "^0.2.8"
