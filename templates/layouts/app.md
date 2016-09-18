@@ -5,7 +5,7 @@ layout: nil
 {%= include(name + "/logo", {size: name === suite.name ? 250 : 150}) %}
 {%= include(name + "/header") %}
 
-![{%= name %} demo](https://raw.githubusercontent.com/{%= repo %}/master/docs/demo.gif)
+{%= ifExists(["docs/demo.gif", "demo.gif"], section("demo.md")) %}
 
 {% body %}
 
