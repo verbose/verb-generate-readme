@@ -61,8 +61,7 @@
     "gulp-istanbul": "^1.0.0",
     "gulp-mocha": "^2.2.0",
     "gulp-unused": "^0.1.2",
-    "mocha": "^2.5.3",
-    "verb-reflinks": "^0.1.3"
+    "mocha": "^2.5.3"
   },
   "keywords": [
     "docs",
