@@ -123,16 +123,6 @@ function generator(app, base) {
       app.union('cache.reflinks', file._reflinks);
       sections(app, file, next);
     });
-    app.preWrite(/\.md$/, function(file, next) {
-      if (file.data.rename) {
-        for (var key in file.data.rename) {
-          if (file.data.rename.hasOwnProperty(key)) {
-            file[key] = file.data.rename[key];
-          }
-        }
-      }
-      next();
-    });
     cb();
   });
 
