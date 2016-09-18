@@ -10,6 +10,8 @@ layout: nil
 ## Table of Contents
 <!-- toc -->
 
+{% body %}
+
 ## What is "Generate"?
 {%= include("generate/what-is-generate") %}
 
@@ -41,16 +43,9 @@ To see a general help menu and available commands for {%= platform.proper %}'s C
 $ {%= platform.command %} help
 ```
 
-## Tasks
-All available tasks.
+{%= section('tasks', include('generate/tasks')) %}
+{%= section('next-steps', include('generate/next-steps')) %}
 
-{%= apidocs('generator.js') %}
-
-Visit Generate's [documentation for tasks][docs]{tasks.md}.
-
-[docs]: https://github.com/generate/generate/blob/master/docs/
-
-{% body %}
 
 ## About
 ### Related projects
@@ -66,6 +61,9 @@ Visit Generate's [documentation for tasks][docs]{tasks.md}.
 {%= maybeInclude("coverage") %}
 {%= include("tests") %}
 
+### Release history
+{%= section("history") %}
+
 ### Author
 {%= includeEither("authors", "author") %}
 
@@ -78,3 +76,5 @@ Visit Generate's [documentation for tasks][docs]{tasks.md}.
 {%= include("footer") %}
 
 {%= reflinks(verb.reflinks) %}
+
+[docs]: https://github.com/generate/generate/blob/master/docs/
