@@ -4,6 +4,7 @@ layout: nil
 
 {%= section("header") %}
 {%= ifExists(["docs/demo.gif", "demo.gif"], section("demo.md")) %}
+{%= ifExists("example.gif", section("example.md")) %}
 
 ## Table of Contents
 <!-- toc -->

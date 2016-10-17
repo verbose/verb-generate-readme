@@ -54,6 +54,9 @@ $ {%= platform.command %} help
 ### Community
 {%= include("generate/community") %}
 
+### Contributors
+{%= gh.contributors() %}
+
 ### Contributing
 {%= include("contributing") %}
 

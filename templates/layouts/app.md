@@ -13,6 +13,9 @@ layout: nil
 ### Related projects
 {%= section("related", related(verb.related.list)) %}
 
+### Release history
+{%= section("history") %}
+
 ### Community
 {%= include("generate/community") %}
 

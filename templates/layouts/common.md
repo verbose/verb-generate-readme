@@ -18,6 +18,12 @@ layout: nil
 ### Contributing
 {%= include("contributing") %}
 
+### Contributors
+{%= gh.contributors() %}
+
+### Release history
+{%= section("history") %}
+
 ### Building docs
 {%= include("build-docs") %}
 
