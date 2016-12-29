@@ -130,7 +130,7 @@ describe('verb-readme-generator', function() {
       app.generate('readme:default', exists('README.md', cb));
     });
 
-    it('should run the `new` task', function(cb) {
+    it.skip('should run the `new` task', function(cb) {
       app.generator('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });
@@ -152,7 +152,7 @@ describe('verb-readme-generator', function() {
       app.generate('readme:default', exists('README.md', cb));
     });
 
-    it('should run the `new` task', function(cb) {
+    it.skip('should run the `new` task', function(cb) {
       app.register('readme', generator);
       app.generate('readme:new', exists('.verb.md', cb));
     });

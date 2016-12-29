@@ -8,6 +8,7 @@ var sections = require('./lib/sections');
 var helpers = require('./lib/helpers');
 var setup = require('./lib/setup');
 var utils = require('./lib/utils');
+var gfm = require('./lib/gfm');
 
 /**
  * Verb readme generator
@@ -95,9 +96,11 @@ function generator(app, base) {
     return app.src(file, {cwd: srcBase})
       .pipe(app.renderFile('hbs', app.cache.data))
       .pipe(app.renderFile('md', app.cache.data))
+      .pipe(gfm.replace())
       .pipe(utils.handle.once(app, 'prePipeline'))
       .pipe(utils.reflinks(app.options))
       .pipe(app.pipeline(app.options.pipeline))
+      .pipe(gfm.restore())
       .pipe(app.dest(function(file) {
         app.base.emit('dest', file);
         file.basename = 'README.md';
@@ -136,9 +139,7 @@ function generator(app, base) {
    */
 
   app.task('readme-data', { silent: true }, function(cb) {
-    if (utils.exists(path.join(app.cwd, 'bower.json'))) {
-      app.data({bower: true});
-    }
+    app.data({bower: utils.exists(path.join(app.cwd, 'bower.json'))});
     cb();
   });
 
