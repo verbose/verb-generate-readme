@@ -1,4 +1,4 @@
-# {%= name %} {%= badge('npm') %} {%= badge('downloads') %} {%= ifExists(["test", "test.js"], badge('travisLinus')) %} {%= ifExists("appveyor.yml", badge('appveyor')) %}
+# {%= name %} {%= badge('npm') %} {%= badge('npm-downloads-monthly') %}  {%= badge('npm-downloads-total') %} {%= ifExists(["test", "test.js"], badge('travisLinus')) %} {%= ifExists("appveyor.yml", badge('appveyor')) %}
 
 > {%= description %}
 
