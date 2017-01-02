@@ -89,7 +89,7 @@ function generator(app, base) {
    */
 
   app.task('readme-render', {silent: true}, function(cb) {
-    debug('starting readme task');
+    debug(`starting task: ${this.name}`, __filename);
     var srcBase = app.options.srcBase || app.cwd;
     var file = app.options.readme || '.verb.md';
 
@@ -218,6 +218,7 @@ function generator(app, base) {
 
   app.task('new', ['verbmd-new']);
   app.task('verbmd-new', function() {
+    debug(`starting task: ${this.name}`, __filename);
     var cwd = app.options.srcBase || path.join(__dirname, 'templates/verbmd');
     return app.src('basic.md', {cwd: cwd})
       .pipe(app.renderFile({layout: app.pkg.get('verb.layout') || false}))
