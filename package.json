@@ -55,7 +55,7 @@
     "verb-defaults": "^0.3.0",
     "verb-repo-data": "^0.1.13",
     "verb-repo-helpers": "^0.2.4",
-    "verb-toc": "^0.2.8"
+    "verb-toc": "^0.2.9"
   },
   "devDependencies": {
     "generate": "^0.13.1",
