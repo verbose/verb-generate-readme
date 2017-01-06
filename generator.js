@@ -94,7 +94,6 @@ function generator(app, base) {
     var file = app.options.readme || '.verb.md';
 
     return app.src(file, {cwd: srcBase})
-      .pipe(app.renderFile('hbs', app.cache.data))
       .pipe(app.renderFile('md', app.cache.data))
       .pipe(gfm.replace())
       .pipe(utils.handle.once(app, 'prePipeline'))
