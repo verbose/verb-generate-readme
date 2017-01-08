@@ -1,1 +1,1 @@
-Please read the [contributing guide]({%= contributingPath %}) for avice on opening issues, pull requests, and coding standards.
+Please read the [contributing guide]({%= contributingPath %}) for advice on opening issues, pull requests, and coding standards.
