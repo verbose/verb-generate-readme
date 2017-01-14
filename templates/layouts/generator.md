@@ -7,8 +7,7 @@ layout: nil
 
 ![{%= name %} demo](https://raw.githubusercontent.com/{%= repo %}/master/docs/demo.gif)
 
-## Table of Contents
-<!-- toc -->
+{%= include("toc") %}
 
 {% body %}
 
