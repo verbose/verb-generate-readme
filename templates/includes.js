@@ -52,7 +52,7 @@ var includes = {
   ].join('\n'),
 
   'install-bower': [
-    'Install with [bower](http://bower.io/)',
+    'Install with [bower](https://bower.io/)',
     '',
     '```sh',
     '$ bower install {%= name %}{%= save === true ? " --save" : "" %}',
@@ -132,7 +132,7 @@ var includes = {
     '**{%= author.name %}**',
     '',
     '+ [github/{%= author.username %}](https://github.com/{%= author.username %})',
-    '+ [twitter/{%= author.twitter %}](http://twitter.com/{%= author.twitter %})'
+    '+ [twitter/{%= author.twitter %}](https://twitter.com/{%= author.twitter %})'
   ].join('\n'),
 
   'authors': [
