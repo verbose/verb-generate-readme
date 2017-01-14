@@ -94,6 +94,7 @@
     "toc": {
       "render": true,
       "method": "preWrite",
+      "collapsible": true,
       "maxdepth": 4
     },
     "layout": "common-minimal",
