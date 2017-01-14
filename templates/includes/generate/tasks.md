@@ -1,5 +1,5 @@
-## Tasks
-All available tasks.
+## Available tasks
+All available tasks for this generator.
 
 {%= apidocs('generator.js') %}
 
