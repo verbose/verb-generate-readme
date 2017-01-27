@@ -27,7 +27,7 @@ layout: nil
 
 ### License
 {%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
-{%= license %}
+{%= licenseStatement || (license ? ("Released under the " + license + " License.") : "MIT") %}
 
 ***
 

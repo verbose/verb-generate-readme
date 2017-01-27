@@ -11,14 +11,11 @@ layout: nil
 
 {% body %}
 
-## What is "Generate"?
-{%= include("generate/what-is-generate") %}
-
 ## Getting started
 ### Install
 {%= include("generate/generator-install") %}
 
-### Usage
+### CLI
 {%= include("generate/generator-run") %}
 {%= doc("what-will-happen") %}
 
@@ -42,11 +39,12 @@ To see a general help menu and available commands for {%= platform.proper %}'s C
 $ {%= platform.command %} help
 ```
 
-{%= section('tasks', include('generate/tasks')) %}
 {%= section('next-steps', include('generate/next-steps')) %}
 
-
 ## About
+### What is "Generate"?
+{%= include("generate/what-is-generate") %}
+
 ### Related projects
 {%= section("related", related(verb.related.list)) %}
 
@@ -71,7 +69,7 @@ $ {%= platform.command %} help
 
 ### License
 {%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
-{%= license %}
+{%= licenseStatement || (license ? ("Released under the " + license + " License.") : "MIT") %}
 
 ***
 

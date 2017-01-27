@@ -1,10 +1,10 @@
 ---
 layout: false
-rename: 
+rename:
   basename: '.verb.md'
 ---
 ## Usage
 
 ```js
-var {%= alias %} = require('{%= name %}');
+var {%= camelcase(name) %} = require('{%= name %}');
 ```

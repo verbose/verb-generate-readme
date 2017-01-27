@@ -1,6 +1,5 @@
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var debug = require('debug')('verb-generate-readme');
 var options = require('./lib/options');
@@ -22,6 +21,7 @@ function generator(app, base) {
    */
 
   options(app);
+  app.option(app.pkg.get('verb') || {});
 
   /**
    * Plugins
@@ -220,14 +220,6 @@ function generator(app, base) {
     debug(`starting task: ${this.name}`, __filename);
     var cwd = app.options.srcBase || path.join(__dirname, 'templates/verbmd');
     return app.src('basic.md', {cwd: cwd})
-      .pipe(app.renderFile({layout: app.pkg.get('verb.layout') || false}))
-      .pipe(utils.through.obj(function(file, enc, next) {
-        var readme = app.get('cache.readme');
-        if (readme) {
-          file.contents = readme;
-        }
-        next(null, file);
-      }))
       .pipe(app.conflicts(app.cwd))
       .pipe(app.dest(app.cwd));
   });
@@ -250,10 +242,6 @@ function generator(app, base) {
     app.ask('verbmd', { save: false }, function(err, answers) {
       if (err) return cb(err);
       if (answers.verbmd) {
-        var readme = path.join(app.cwd, 'README.md');
-        if (utils.exists(readme)) {
-          app.set('cache.readme', fs.readFileSync(readme));
-        }
         app.build('new', cb);
       } else {
         cb();

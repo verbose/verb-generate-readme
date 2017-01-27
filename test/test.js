@@ -192,38 +192,57 @@ describe('verb-readme-generator', function() {
       app.option('readme', fixtures('variable-name.md'));
       app.data({name: pkg.name});
 
-      app.register('readme', assertVariable(pkg.name));
+      app.use(assertVariable(pkg.name));
       app.generate('readme', cb);
     });
 
     it('should set `alias`', function(cb) {
       app.option('readme', fixtures('variable-alias.md'));
-      app.data({name: pkg.name});
-
-      app.register('readme', assertVariable('foo'));
+      app.use(assertVariable('foo', {name: 'foo'}));
       app.generate('readme', cb);
     });
 
     it('should set `varname`', function(cb) {
       app.option('readme', fixtures('variable-varname.md'));
-      app.data({name: pkg.name});
+      app.use(assertVariable('verbFooGenerator', {name: 'verb-foo-generator'}));
+      app.generate('readme', cb);
+    });
 
-      app.register('readme', assertVariable('verbFooGenerator'));
+    it('should set `license`', function(cb) {
+      app.option('readme', fixtures('variable-license.md'));
+      app.data({license: 'MIT'});
+
+      app.use(assertVariable('MIT'));
+      app.generate('readme', cb);
+    });
+
+    it('should set `license-statement`', function(cb) {
+      app.option('readme', fixtures('variable-license-statement.md'));
+      app.option('layout', null);
+      app.data({license: 'MIT'});
+
+      app.use(assertVariable('Released under the MIT License.'));
       app.generate('readme', cb);
     });
   });
 
-  function assertVariable(expected) {
+  function assertVariable(expected, data) {
     return function() {
-      this.postRender(/./, function(file, next) {
-        if (file.engine !== 'md') {
-          next();
-          return;
-        }
-        assert.equal(file.content, expected);
+      this.onLoad(/\/fixtures/, function(file, next) {
+        file.layout = null;
         next();
       });
-    }
+
+      this.postRender(/\/fixtures/, function(file, next) {
+        assert.equal(file.content.trim(), expected);
+        next();
+      });
+
+      if (data) {
+        this.data(data);
+      }
+      generator.apply(this, arguments);
+    };
   }
 });
 
