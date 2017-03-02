@@ -103,7 +103,7 @@ var includes = {
   ].join('\n'),
 
   'tests': [
-    'Install dev dependencies:',
+    'Running and reviewing unit tests is a great way to get familiarized with a library and its API. You can install dependencies and run tests with the following command:',
     '',
     '```sh',
     '$ npm install && npm test',
