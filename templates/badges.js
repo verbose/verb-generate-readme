@@ -20,5 +20,5 @@ module.exports = {
 
   travis: '[![Build Status](https://img.shields.io/travis/{%= repository %}.svg?style=flat)](https://travis-ci.org/{%= repository %})',
 
-  travisLinus: '[![Linux Build Status](https://img.shields.io/travis/{%= repository %}.svg?style=flat&label=Travis)](https://travis-ci.org/{%= repository %})',
+  travisLinux: '[![Linux Build Status](https://img.shields.io/travis/{%= repository %}.svg?style=flat&label=Travis)](https://travis-ci.org/{%= repository %})',
 };
