@@ -24,7 +24,7 @@
 
 ### License
 {%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
-{%= before.license ? (before.license + "\n") : "" %}{%= license %}{%= after.license ? (after.license + "\n") : "" %}
+{%= before.license ? (before.license + "\n") : "" %}{%= licenseStatement || ("Released under the " + (license || "MIT") + " License.") %}{%= after.license ? (after.license + "\n") : "" %}
 
 ***
 
