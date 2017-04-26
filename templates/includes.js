@@ -35,6 +35,15 @@ var includes = {
     '```'
   ].join('\n'),
 
+  'install-yarn': [
+    'Install with [yarn](https://yarnpkg.com):',
+    '',
+    '```sh',
+    '$ yarn add{%= (typeof save === "undefined" || save === false ? " -D" : "") %} {%= name %}',
+    '```'
+
+  ].join('\n'),
+
   'install-global': [
     'Install globally with [npm](https://www.npmjs.com/)',
     '',
