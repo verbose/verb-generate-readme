@@ -6,10 +6,10 @@
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "contributors": [
     "arrowrowe (http://arrowrowe.me)",
-    "Brian Woodward <brian.woodward@gmail.com> (https://twitter.com/doowb)",
+    "Brian Woodward (https://twitter.com/doowb)",
     "Charlike Mike Reagent (https://i.am.charlike.online)",
-    "Ivan Erceg <ivan@softwaremarbles.com> (softwaremarbles.com)",
-    "Jon Schlinkert <jon.schlinkert@sellside.com> (http://twitter.com/jonschlinkert)"
+    "Ivan Erceg (softwaremarbles.com)",
+    "Jon Schlinkert (http://twitter.com/jonschlinkert)"
   ],
   "repository": "verbose/verb-generate-readme",
   "bugs": {
@@ -32,45 +32,40 @@
   },
   "dependencies": {
     "arr-diff": "^4.0.0",
-    "assemble-handle": "^0.1.3",
+    "assemble-handle": "^0.1.4",
     "async-each": "^1.0.1",
     "camel-case": "^3.0.0",
-    "debug": "^2.6.4",
-    "delete": "^0.3.2",
+    "debug": "^3.1.0",
+    "delete": "^1.1.0",
     "engine-handlebars": "^0.8.2",
     "fs-exists-sync": "^0.1.0",
-    "get-value": "^2.0.6",
+    "get-value": "^3.0.1",
     "gfm-code-blocks": "^1.0.0",
-    "git-branch": "^0.3.0",
-    "gulp-reflinks": "^0.2.0",
-    "has-value": "^0.3.1",
+    "git-branch": "^2.0.1",
+    "gulp-reflinks": "^1.0.0",
+    "has-value": "^2.0.2",
     "is-valid-app": "^0.3.0",
     "lazy-cache": "^2.0.2",
     "log-utils": "^0.2.1",
-    "markdown-toc": "^1.1.0",
-    "match-file": "^0.2.2",
-    "micromatch": "^2.3.11",
-    "mixin-deep": "^1.2.0",
-    "object.pick": "^1.2.0",
+    "markdown-toc": "^1.2.0",
+    "match-file": "^1.0.0",
+    "micromatch": "^3.1.10",
+    "mixin-deep": "^1.3.1",
+    "object.pick": "^1.3.0",
     "template-helpers": "^0.6.7",
     "through2": "^2.0.3",
     "update-sections": "^0.1.2",
     "verb-collections": "^0.1.5",
     "verb-defaults": "^0.3.0",
     "verb-repo-data": "^0.1.15",
-    "verb-repo-helpers": "^0.2.4",
+    "verb-repo-helpers": "^1.0.0",
     "verb-toc": "^0.2.9"
   },
   "devDependencies": {
-    "generate": "^0.13.1",
-    "global-modules": "^0.2.3",
-    "gulp": "^3.9.1",
-    "gulp-eslint": "^3.0.1",
-    "gulp-format-md": "^0.1.12",
-    "gulp-istanbul": "^1.1.1",
-    "gulp-mocha": "^3.0.0",
-    "gulp-unused": "^0.2.1",
-    "mocha": "^3.2.0"
+    "generate": "^0.14.0",
+    "global-modules": "^1.0.0",
+    "gulp-format-md": "^1.0.0",
+    "mocha": "^5.2.0"
   },
   "keywords": [
     "api docs",
@@ -131,10 +126,6 @@
         "verb-toc"
       ]
     },
-    "reflinks": [
-      "gulp",
-      "verb-generate-readme"
-    ],
     "sections": false,
     "lint": {
       "reflinks": true
