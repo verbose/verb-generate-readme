@@ -106,6 +106,8 @@ describe('verb-readme-generator', function() {
 
   if (!process.env.CI && !process.env.TRAVIS) {
     describe('generator (CLI)', function() {
+      this.timeout(10000);
+
       it('should run the default task using the `verb-generate-readme` name', function(cb) {
         app.use(generator);
         app.generate('verb-generate-readme', exists('README.md', cb));
@@ -119,6 +121,8 @@ describe('verb-readme-generator', function() {
   }
 
   describe('generator', function() {
+    this.timeout(10000);
+
     it('should work as a generator', function(cb) {
       app.cwd = fixtures();
       app.register('readme', generator);

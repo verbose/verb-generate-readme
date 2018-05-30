@@ -74,7 +74,7 @@ var includes = {
 
   'highlight': [
     '{% if (verb.related && verb.related.highlight) { %}',
-    'You might also be interested in [{%= verb.related.highlight %}]({%= pkg(verb.related.highlight, "homepage") %}).',
+    'You might also be interested in [{%= verb.related.highlight %}]({%= getPkg(verb.related.highlight, "homepage") %}).',
     '{% } %}',
     ''
   ].join('\n'),

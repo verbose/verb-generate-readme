@@ -1,13 +1,14 @@
 'use strict';
 
-var path = require('path');
-var debug = require('debug')('verb-generate-readme');
-var options = require('./lib/options');
-var sections = require('./lib/sections');
-var helpers = require('./lib/helpers');
-var setup = require('./lib/setup');
-var utils = require('./lib/utils');
-var gfm = require('./lib/gfm');
+const fs = require('fs');
+const path = require('path');
+const debug = require('debug')('verb-generate-readme');
+const options = require('./lib/options');
+const sections = require('./lib/sections');
+const helpers = require('./lib/helpers');
+const setup = require('./lib/setup');
+const utils = require('./lib/utils');
+const gfm = require('./lib/gfm');
 
 /**
  * Verb readme generator
@@ -138,7 +139,7 @@ function generator(app, base) {
    */
 
   app.task('readme-data', { silent: true }, function(cb) {
-    app.data({bower: utils.exists(path.join(app.cwd, 'bower.json'))});
+    app.data({bower: fs.existsSync(path.join(app.cwd, 'bower.json'))});
     cb();
   });
 
@@ -160,7 +161,7 @@ function generator(app, base) {
 
     // load `docs` templates from user `./docs` or specified dir
     var docs = path.join(app.cwd, 'docs');
-    if (utils.exists(docs) && app.pkg.get('verb.options.docs') !== false) {
+    if (fs.existsSync(docs) && app.pkg.get('verb.options.docs') !== false) {
       app.docs('*.md', { cwd: docs });
     }
 
@@ -237,7 +238,7 @@ function generator(app, base) {
    */
 
   app.task('verbmd-prompt', {silent: true}, function(cb) {
-    if (utils.exists('.verb.md')) return cb();
+    if (fs.existsSync('.verb.md')) return cb();
     app.confirm('verbmd', 'Can\'t find a .verb.md, want to add one?');
     app.ask('verbmd', { save: false }, function(err, answers) {
       if (err) return cb(err);
