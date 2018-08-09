@@ -1,1 +1,1 @@
-![{%= name %} example](https://raw.githubusercontent.com/{%= repo %}/master/example.gif)
+![{%= name %} example](https://raw.githubusercontent.com/{%= repo %}/master/{%= typeof gifPath !== "undefined" ? gitPath : "example.gif" %})

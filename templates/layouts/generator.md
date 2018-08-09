@@ -39,20 +39,26 @@ To see a general help menu and available commands for {%= platform.proper %}'s C
 $ {%= platform.command %} help
 ```
 
-{%= section('next-steps', include('generate/next-steps')) %}
+## Tasks
+{%= include("tasks.md") %}
+
+## Next Steps
+{%= section('next-steps', include('generate/next-steps.md')) %}
 
 ## About
 ### What is "Generate"?
-{%= include("generate/what-is-generate") %}
+{%= include("generate/what-is-generate.md") %}
 
 ### Related projects
 {%= section("related", related(verb.related.list)) %}
+
+{%= maybeInclude("docs/resource.md", "docs") %}
 
 ### Community
 {%= include("generate/community") %}
 
 ### Contributors
-{%= gh.contributors() %}
+{%= ghContributors() %}
 
 ### Contributing
 {%= include("contributing") %}
@@ -69,7 +75,7 @@ $ {%= platform.command %} help
 
 ### License
 {%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
-{%= licenseStatement || (license ? ("Released under the " + license + " License.") : "MIT") %}
+{%= licenseStatement || (typeof license === "string" ? ("Released under the " + license + " License.") : "MIT") %}
 
 ***
 

@@ -3,9 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 const debug = require('debug')('verb-generate-readme');
-const options = require('./lib/options');
+const through = require('through2');
+const placements = require('./lib/placements');
 const sections = require('./lib/sections');
 const helpers = require('./lib/helpers');
+const options = require('./lib/options');
 const setup = require('./lib/setup');
 const utils = require('./lib/utils');
 const gfm = require('./lib/gfm');
@@ -16,6 +18,15 @@ const gfm = require('./lib/gfm');
 
 function generator(app, base) {
   if (!utils.isValid(app, 'verb-readme-generator')) return;
+  app.cwd = process.cwd();
+
+  /**
+   * Listeners
+   */
+
+  app.on('view', view => {
+    view.extname = view.extname || '.md';
+  });
 
   /**
    * Init options
@@ -89,19 +100,31 @@ function generator(app, base) {
    * @name readme-render
    */
 
-  app.task('readme-render', {silent: true}, function(cb) {
+  app.task('readme-render', {silent: true}, function() {
     debug(`starting task: ${this.name}`, __filename);
-    var srcBase = app.options.srcBase || app.cwd;
-    var file = app.options.readme || '.verb.md';
+    const srcBase = app.options.srcBase || app.cwd;
+    const file = app.options.readme || '.verb.md';
+
+    app.data('pkg', require(path.join(process.cwd(), 'package.json')));
+    app.data('author.linkedin', app.data('author.linkedin') || 'jonschlinkert');
+    app.data('author.twitter', app.data('author.twitter') || 'jonschlinkert');
 
     return app.src(file, {cwd: srcBase})
-      .pipe(app.renderFile('md', app.cache.data))
+      .pipe(through.obj((file, enc, next) => {
+        let print = app.options.pp;
+        if (print) {
+          let str = `{%= print(${print}) %}\n` + file.contents.toString();
+          file.contents = Buffer.from(str);
+        }
+        next(null, file);
+      }))
+      .pipe(app.renderFile('*'))
       .pipe(gfm.replace())
       .pipe(utils.handle.once(app, 'prePipeline'))
       .pipe(utils.reflinks(app.options))
       .pipe(app.pipeline(app.options.pipeline))
       .pipe(gfm.restore())
-      .pipe(app.dest(function(file) {
+      .pipe(app.dest(file => {
         app.base.emit('dest', file);
         file.basename = 'README.md';
         return app.cwd;
@@ -117,14 +140,20 @@ function generator(app, base) {
    * @name readme-middleware
    */
 
-  app.task('readme-middleware', { silent: true }, function(cb) {
+  app.task('readme-middleware', { silent: true }, cb => {
     app.handler('prePipeline');
-    app.preRender(/(verb|readme)\.md$/i, function(file, next) {
+    app.preRender(/(verb|readme)\.md$/i, (file, next) => {
       utils.del(path.resolve(app.cwd, 'readme.md'), next);
     });
-    app.preWrite(/\.md$/, function(file, next) {
+    app.preWrite(/\.md$/, (file, next) => {
       app.union('cache.reflinks', file._reflinks);
-      sections(app, file, next);
+      placements(app, file, err => {
+        if (err) {
+          next(err);
+          return;
+        }
+        sections(app, file, next);
+      });
     });
     cb();
   });
@@ -138,7 +167,7 @@ function generator(app, base) {
    * @name readme-data
    */
 
-  app.task('readme-data', { silent: true }, function(cb) {
+  app.task('readme-data', { silent: true }, cb => {
     app.data({bower: fs.existsSync(path.join(app.cwd, 'bower.json'))});
     cb();
   });
@@ -152,24 +181,24 @@ function generator(app, base) {
    * @name readme-templates
    */
 
-  app.task('readme-templates', { silent: true }, function(cb) {
-    var templates = path.join.bind(path, __dirname, 'templates');
-    var config = app.base.get('cache.config') || {};
+  app.task('readme-templates', { silent: true }, cb => {
+    let templates = path.resolve.bind(path, __dirname, 'templates');
+    let config = app.base.get('cache.config') || {};
 
     // load default docs
     app.docs('*.md', {cwd: templates('docs')});
-
-    // load `docs` templates from user `./docs` or specified dir
-    var docs = path.join(app.cwd, 'docs');
-    if (fs.existsSync(docs) && app.pkg.get('verb.options.docs') !== false) {
-      app.docs('*.md', { cwd: docs });
-    }
 
     // load `layout` templates
     app.layouts('*.md', { cwd: templates('layouts') });
     app.includes('**/*.md', { cwd: templates('includes') });
     app.includes(require('./templates/includes'));
     app.badges(require('./templates/badges'));
+
+    // load `docs` templates from user `./docs` or specified dir
+    let docs = path.resolve(app.cwd, 'docs');
+    if (fs.existsSync(docs) && app.pkg.get('verb.options.docs') !== false) {
+      app.docs('**/*.md', { cwd: docs });
+    }
 
     // call `.config.process` again to override built-in templates
     // with any templates defined in `package.json`
@@ -191,10 +220,10 @@ function generator(app, base) {
    * @name readme-reflinks
    */
 
-  app.task('readme-reflinks', {silent: true}, function(cb) {
-    var existing = app.pkg.get('verb.reflinks') || [];
-    var reflinks = app.get('cache.reflinks') || [];
-    var diff = utils.diff(reflinks, existing);
+  app.task('readme-reflinks', {silent: true}, cb => {
+    let existing = app.pkg.get('verb.reflinks') || [];
+    let reflinks = app.get('cache.reflinks') || [];
+    let diff = utils.diff(reflinks, existing);
     if (diff.length > 1) {
       app.pkg.union('verb.reflinks', diff);
       app.pkg.save();
@@ -219,8 +248,8 @@ function generator(app, base) {
   app.task('new', ['verbmd-new']);
   app.task('verbmd-new', function() {
     debug(`starting task: ${this.name}`, __filename);
-    var cwd = app.options.srcBase || path.join(__dirname, 'templates/verbmd');
-    return app.src('basic.md', {cwd: cwd})
+    let cwd = app.options.srcBase || path.join(__dirname, 'templates/verbmd');
+    return app.src('basic.md', { cwd })
       .pipe(app.conflicts(app.cwd))
       .pipe(app.dest(app.cwd));
   });

@@ -1,23 +1,22 @@
 'use strict';
 
 require('mocha');
-var fs = require('fs');
-var path = require('path');
-var assert = require('assert');
-var del = require('delete');
-var gm = require('global-modules');
-var isValid = require('is-valid-app');
-var generate = require('generate');
-var pkg = require('../package');
-var generator = require('..');
-var orig = process.cwd();
-var app;
-
-var fixtures = path.resolve.bind(path, __dirname, 'fixtures');
-var actual = path.resolve.bind(path, __dirname, 'actual');
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const del = require('delete');
+const gm = require('global-modules');
+const isValid = require('is-valid-app');
+const Generate = require('generate');
+const pkg = require('../package');
+const generator = require('..');
+const orig = process.cwd();
+const fixtures = path.resolve.bind(path, __dirname, 'fixtures');
+const actual = path.resolve.bind(path, __dirname, 'actual');
+let app;
 
 function exists(name, cb) {
-  var filepath = actual(name);
+  const filepath = actual(name);
   return function(err) {
     if (err) return cb(err);
 
@@ -34,8 +33,7 @@ describe('verb-readme-generator', function() {
   this.slow(300);
 
   beforeEach(function() {
-    app = generate({cli: true, silent: true});
-
+    app = new Generate({ cli: true, silent: true });
     app.option('dest', actual());
     app.base.cwd = actual();
     app.option('srcBase', fixtures());
@@ -56,7 +54,7 @@ describe('verb-readme-generator', function() {
 
   describe('plugin', function() {
     it('should only register the plugin once', function(cb) {
-      var count = 0;
+      let count = 0;
       app.on('plugin', function(name) {
         if (name === 'verb-readme-generator') {
           count++;
@@ -79,7 +77,7 @@ describe('verb-readme-generator', function() {
 
   describe('generator plugin', function() {
     it('should work as a generator plugin', function(cb) {
-      var count = 0;
+      let count = 0;
       app.register('foo', function(foo) {
         foo.use(generator);
         assert(foo.tasks.hasOwnProperty('default'));
@@ -92,7 +90,7 @@ describe('verb-readme-generator', function() {
     });
 
     it('should add tasks to the generator', function(cb) {
-      var count = 0;
+      let count = 0;
       app.register('foo', function(foo) {
         foo.use(generator);
         assert(foo.tasks.hasOwnProperty('default'));
@@ -169,8 +167,8 @@ describe('verb-readme-generator', function() {
       app.register('readme', generator);
       app.generate('readme', function(err) {
         if (err) return cb(err);
-        var filepath = actual('README.md');
-        var str = fs.readFileSync(filepath, 'utf8');
+        const filepath = actual('README.md');
+        const str = fs.readFileSync(filepath, 'utf8');
         assert(/this is <%= name %>/.test(str));
         cb();
       });

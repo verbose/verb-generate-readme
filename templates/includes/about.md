@@ -1,23 +1,13 @@
-### Related projects
-{%= section("related", related(verb.related.list)) %}
+{%= include("details-contributing") %}
+{%= include("details-running-tests") %}
+{%= include("details-building-docs") %}
 
+### Related projects
+{%= section("related", include("related-list")) %}
 {%= section("community") %}
 
-### Contributing
-{%= include("contributing") %}
-
 ### Contributors
-{%= gh.contributors() %}
-
-### Release history
-{%= section("history") %}
-
-### Building docs
-{%= include("build-docs") %}
-
-### Running tests
-{%= maybeInclude("coverage") %}
-{%= include("tests") %}
+{%= ghContributors() %}
 
 ### Author
 {%= includeEither("authors", "author") %}

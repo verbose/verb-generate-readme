@@ -1,12 +1,13 @@
 {% if (obj.verb.toc && (obj.verb.toc === "collapsible" || typeof obj.verb.toc === 'object' && obj.verb.toc.collapsible === true)) { %}
+## Table of Contents
+
 <details>
-<summary><strong>Table of Contents</strong></summary>
+<summary><strong>Details</strong></summary>
 
 <!-- toc -->
 
 </details>
 {% } else { %}
-## Table of Contents
 
 <!-- toc -->
 

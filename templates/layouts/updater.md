@@ -5,35 +5,49 @@ layout: nil
 {%= include("update/logo") %}
 {%= include("update/header") %}
 
-![{%= name %} demo](https://raw.githubusercontent.com/{%= repo %}/master/docs/demo.gif)
-
 {%= include("toc") %}
 
 ## What is "Update"?
+
+<details>
+  <summary><strong>Details</strong></summary>
+
 {%= include("update/what-is-update") %}
+
+</details>
 
 {% body %}
 
+
 ## About
-### Related projects
-{%= section("related", related(verb.related.list)) %}
 
-### Community
-{%= include("update/community") %}
+<details>
+  <summary><strong>Contributing</strong></summary>
 
-### Contributing
 {%= include("contributing") %}
 
-### Running tests
+<details>
+
+<details>
+  <summary><strong>Running Tests</strong></summary>
+
 {%= maybeInclude("coverage") %}
 {%= include("tests") %}
+
+<details>
+
+### Related projects
+You might also find these projects useful.
+{%= section("related", related(verb.related.list)) %}
+
+{%= include("update/community") %}
 
 ### Author
 {%= includeEither("authors", "author") %}
 
 ### License
 {%= copyright({linkify: true, prefix: "Copyright", symbol: "©"}) %}
-{%= licenseStatement || (license ? ("Released under the " + license + " License.") : "MIT") %}
+{%= licenseStatement || (typeof license !== 'undefined' ? ("Released under the " + license + " License.") : "MIT") %}
 
 ***
 

@@ -9,9 +9,9 @@ var includes = {
   'usage': [
     '```js',
     '// node.js',
-    'var {%= alias %} = require(\'{%= name %}\');',
+    'var {%= alias %} = require(\'{%= pkg.name %}\');',
     '// es6',
-    'import {%= alias %} from \'{%= name %}\';',
+    'import {%= alias %} from \'{%= pkg.name %}\';',
     '```'
   ].join('\n'),
 
@@ -23,7 +23,7 @@ var includes = {
     'Install with [npm](https://www.npmjs.com/):',
     '',
     '```sh',
-    '$ npm install {%= name %}',
+    '$ npm install {%= pkg.name %}',
     '```'
   ].join('\n'),
 
@@ -31,7 +31,7 @@ var includes = {
     'Install with [npm](https://www.npmjs.com/):',
     '',
     '```sh',
-    '$ npm install{%= (typeof save !== "undefined" && save === true ? " --save" : "") %} {%= name %}',
+    '$ npm install{%= (typeof save !== "undefined" && save === true ? " --save" : "") %} {%= pkg.name %}',
     '```'
   ].join('\n'),
 
@@ -39,7 +39,7 @@ var includes = {
     'Install with [yarn](https://yarnpkg.com):',
     '',
     '```sh',
-    '$ yarn add{%= (typeof save === "undefined" || save === false ? " -D" : "") %} {%= name %}',
+    '$ yarn add{%= (typeof save === "undefined" || save === false ? " -D" : "") %} {%= pkg.name %}',
     '```'
 
   ].join('\n'),
@@ -48,7 +48,7 @@ var includes = {
     'Install globally with [npm](https://www.npmjs.com/)',
     '',
     '```sh',
-    '$ npm install --global {%= name %}',
+    '$ npm install --global {%= pkg.name %}',
     '```'
   ].join('\n'),
 
@@ -56,7 +56,7 @@ var includes = {
     'Install as a `devDependency` with [npm](https://www.npmjs.com/):',
     '',
     '```sh',
-    '$ npm install --save-dev {%= name %}',
+    '$ npm install --save-dev {%= pkg.name %}',
     '```'
   ].join('\n'),
 
@@ -64,7 +64,7 @@ var includes = {
     'Install with [bower](https://bower.io/)',
     '',
     '```sh',
-    '$ bower install {%= name %}{%= save === true ? " --save" : "" %}',
+    '$ bower install {%= pkg.name %}{%= save === true ? " --save" : "" %}',
     '```'
   ].join('\n'),
 
@@ -94,10 +94,10 @@ var includes = {
   'upgrading': [
     '**Clear your cache and re-install**',
     '',
-    'If you\'re currently running {%= name %} v{%= previous("minor", version) %} or lower, please do the following to clear out old versions of {%= name %}, so that the latest version of {%= name %} will install properly:',
+    'If you\'re currently running {%= pkg.name %} v{%= previous("minor", version) %} or lower, please do the following to clear out old versions of {%= pkg.name %}, so that the latest version of {%= pkg.name %} will install properly:',
     '',
     '```bash',
-    '$ npm cache clean && npm i -g {%= name %}',
+    '$ npm cache clean && npm i -g {%= pkg.name %}',
     '```'
   ].join('\n'),
 
@@ -139,14 +139,15 @@ var includes = {
 
   'author': [
     '**{%= author.name %}**',
-    '',
-    '+ [github/{%= author.username %}](https://github.com/{%= author.username %})',
-    '+ [twitter/{%= author.twitter %}](https://twitter.com/{%= author.twitter %})'
+    '+ [GitHub Profile](https://github.com/{%= author.username %})',
+    '+ [Twitter Profile](https://twitter.com/{%= author.twitter %})',
+    '{% if (author.linkedin) { %}+ [LinkedIn Profile](https://linkedin.com/in/{%= author.linkedin %}){% } %}',
+    '{% if (author.stackoverflow) { %}+ [StackOverflow Profile](https://stackoverflow.com/users/{%= author.stackoverflow %}){% } %}',
   ].join('\n'),
 
   'authors': [
     '{% authors.forEach(function(author) { %}',
-    '{%= include("author", {author: author}) %}',
+    '{%= include("author", { author: author }) %}',
     '{% }) %}'
   ].join('\n'),
 
